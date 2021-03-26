@@ -1,0 +1,15 @@
+{
+  "Cards": [
+    {
+      "Frontside": "hello",
+      "Backside": "hallo",
+      "Learningphase": 0
+    },
+    {
+      "Learningphase": 0,
+      "Frontside": "q4wegw",
+      "Backside": "wg"
+    }
+  ]
+}
+

@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.Box;
 import java.awt.Component;
 import javax.swing.border.TitledBorder;
+
 import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.JCheckBox;
@@ -23,11 +24,17 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JEditorPane;
 import javax.swing.JComboBox;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class Vokabeltrainer {
 
 	private JFrame frame;
-
+	private JEditorPane backpageEditorPane;
+	private JEditorPane frontpageEditorPane;
+	private JComboBox<String> comboBoxKategorie;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -55,9 +62,14 @@ public class Vokabeltrainer {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		Data.JsonDataManager jsonDataManager = new Data.JsonDataManager();
+		
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1000, 601);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				
+		//*********************Menue*************************************
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.getContentPane().add(menuBar, BorderLayout.NORTH);
@@ -74,45 +86,76 @@ public class Vokabeltrainer {
 		JMenuItem menuItemAddVoc = new JMenuItem("Vokabeleditor");
 		menu.add(menuItemAddVoc);
 		
+		
+		//*********************EditorPage*************************************
+		
 		JPanel vocableEditorPanel = new JPanel();
 		frame.getContentPane().add(vocableEditorPanel, BorderLayout.CENTER);
 		vocableEditorPanel.setLayout(null);
 		
+		
+		//Header of Page
+		JLabel pageTitle = new JLabel("Vokabeleditor");
+		pageTitle.setFont(new Font("Arial", Font.PLAIN, 27));
+		pageTitle.setBounds(394, 19, 186, 42);
+		vocableEditorPanel.add(pageTitle);
+		
+		JLabel lblKategorie = new JLabel("Kategorie");
+		lblKategorie.setBounds(615, 71, 82, 23);
+		vocableEditorPanel.add(lblKategorie);
+		
+		comboBoxKategorie = new JComboBox<String>();
+		comboBoxKategorie.setBounds(717, 68, 242, 29);
+		vocableEditorPanel.add(comboBoxKategorie);
+		List<String> KategoriesNames = jsonDataManager.getKategorie();
+		for(String kategorie : KategoriesNames)
+			comboBoxKategorie.addItem(kategorie);
+		
+		//Frontside 
 		JPanel frontpagePanel = new JPanel();
 		frontpagePanel.setLayout(null);
 		frontpagePanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Vorderseite", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		frontpagePanel.setBounds(17, 100, 942, 164);
 		vocableEditorPanel.add(frontpagePanel);
 		
-		JEditorPane frontpageEditorPane = new JEditorPane();
+		frontpageEditorPane = new JEditorPane();
 		frontpageEditorPane.setBounds(17, 29, 908, 116);
 		frontpagePanel.add(frontpageEditorPane);
 		
-		JLabel lblNewLabel = new JLabel("Vokabeleditor");
-		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 27));
-		lblNewLabel.setBounds(394, 19, 186, 42);
-		vocableEditorPanel.add(lblNewLabel);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(717, 68, 242, 29);
-		vocableEditorPanel.add(comboBox);
-		
+		//Backside 
 		JPanel backpagePanel = new JPanel();
 		backpagePanel.setLayout(null);
 		backpagePanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "R\u00FCckseite", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		backpagePanel.setBounds(17, 272, 942, 175);
 		vocableEditorPanel.add(backpagePanel);
 		
-		JEditorPane backpageEditorPane = new JEditorPane();
+		backpageEditorPane = new JEditorPane();
 		backpageEditorPane.setBounds(17, 29, 908, 126);
 		backpagePanel.add(backpageEditorPane);
 		
-		JButton btnAddVoc = new JButton("New button");
+		
+		//Footer
+		JButton btnAddVoc = new JButton("Add Voc");
+		btnAddVoc.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					Data.CardData cardData = new Data.CardData(
+							frontpageEditorPane.getText(),
+							backpageEditorPane.getText(),
+							comboBoxKategorie.getSelectedItem().toString());
+					jsonDataManager.addCard(cardData);
+				}
+				catch(NullPointerException e) {
+					// Some Parameters are not Set
+					System.out.println("Kategorie, Frontpage or Backpage not Set: " + e);
+				}
+			}
+		});
 		btnAddVoc.setBounds(828, 452, 131, 31);
 		vocableEditorPanel.add(btnAddVoc);
 		
-		JLabel lblNewLabel_1 = new JLabel("Kategorie");
-		lblNewLabel_1.setBounds(615, 71, 82, 23);
-		vocableEditorPanel.add(lblNewLabel_1);
+		
 	}
 }
