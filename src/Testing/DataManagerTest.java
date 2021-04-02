@@ -3,26 +3,35 @@ package Testing;
 import static org.junit.jupiter.api.Assertions.*;
 import Data.*;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 class DataManagerTest {
-	private String dummyFrontSide = "Baum";
-	private String dummyBackSide  = "Tree";
-	private String dummyTopic	  = "Englisch";
-	private CardData testCard = new CardData(dummyFrontSide, dummyBackSide, dummyTopic);
+	
+	@Mock
+	private CardData testCard = new CardData("Baum", "Tree", "Englisch");
+	
+	public DataManagerTest(){}
 	
 	
 	@Test
 	void cardDataTest() {
-		assertEquals(dummyFrontSide, testCard.getFrontSide());
-		assertEquals(dummyBackSide, testCard.getBackSide());
-		assertEquals(dummyTopic, testCard.getTopic());
+		assertEquals(testCard.getFrontSide(), testCard.getFrontSide());
+		assertEquals(testCard.getBackSide(), testCard.getBackSide());
+		assertEquals(testCard.getTopic(), testCard.getTopic());
 		//TODO assertEquals with timestamp by using mock-timestamp instead of libary call
 	}
 	
 	@Test
 	void addCardTest() {
+		
 		assertEquals(true, testCard.getID());
 	}
+	
+	
 
 }

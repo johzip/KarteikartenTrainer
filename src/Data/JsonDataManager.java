@@ -20,56 +20,115 @@ public class JsonDataManager {
 	
 	private String storageURL = System.getProperty("user.dir") + "\\JSON_Data" ;
 	
+	/*
+	 * Adds a new Card to the acoording Json File defined by the Topic.
+	 * By extracting all Data from the CardData Object 
+	 * then creating the according JSON Object with it 
+	 * and at last calling addJsonEntry() with the path of the JSON File and the JSOn Object
+	 * Params:
+	 * cardData: object of the Card including all data for saving it in a JSON File
+	 */
 	public void addCard(CardData cardData){
 		try {
 			File kategorieFile = getSpecificJSONFile(cardData.getTopic());
-			JSONObject object = parseJSONContent(getFileContent(kategorieFile));
-			
 			JSONObject obj = new JSONObject();
 		    String jsonText;
 		    obj.put("Frontside", cardData.getFrontSide());
 		    obj.put("Backside", cardData.getBackSide());
 		    obj.put("Learningphase", new Integer(0));
 		    jsonText = obj.toString();
-		    addJsonEntry(kategorieFile.getAbsolutePath(), jsonText);
+			String newFileConent = addJSONContent(getFileContent(kategorieFile), jsonText);
+		    addJsonEntry(kategorieFile.getAbsolutePath(), newFileConent);
 		}
 		catch(NullPointerException e2) {
+			System.out.println("addCard has Error");
 			System.out.println(e2);
 		}
 		catch(Exception e3) {
+			System.out.println("addCard has Error");
 			System.out.println(e3); 
 		}
 	}
+	
+	
+	/*
+	 * Combines the to Strings
+	 * params: 
+	 * existingFileContent: Content of the existing File
+	 * jsonTextToAdd: Content of the String to add
+	 */
+	private String addJSONContent(String existingFileContent, String jsonTextToAdd) {
+		existingFileContent = existingFileContent.trim();
+		int positionWhereToAdd = existingFileContent.indexOf("[") + 1;
+		String cobinedJSONString = existingFileContent.substring(0, positionWhereToAdd) + jsonTextToAdd;
+		if( !isFirstCard(existingFileContent.substring(positionWhereToAdd)+1)) {
+			cobinedJSONString= cobinedJSONString + "," ;
+		}
+		return (cobinedJSONString + existingFileContent.substring(positionWhereToAdd));
+	}
 
+	private boolean isFirstCard(String JSONString) {
+		String firstChar = JSONString.substring(0, 1);
+		System.out.println(firstChar);
+		if(firstChar.equals("]"))
+			return true;
+		return false;
+	}
+
+
+	/*
+	 * Needs Work!!!
+	 * 
+	 * Adds a JSON-Object to an Existing JSON File.
+	 * Params:
+	 * absolutePath: absolute Path of the JSON File
+	 * jsonText: The Text in JSON Syntax that is beeing added
+	 */
 	private void addJsonEntry(String absolutePath, String jsonText){
-		try (FileWriter fw = new FileWriter(absolutePath, true);
+		try (FileWriter fw = new FileWriter(absolutePath, false);
 	       BufferedWriter bw = new BufferedWriter(fw)) {
-	     
 			bw.write(jsonText);
-			bw.newLine();     
+			bw.newLine();   
+			bw.close();
 		}catch (IOException e1) {
 			// TODO Auto-generated catch block
+			System.out.println("addJsonEntry has Error");
 			e1.printStackTrace();
 		}
 	}
 
+	/*
+	 * 
+	 * Params:
+	 * fileContent: Content of the JSON File
+	 */
 	private JSONObject parseJSONContent(String fileContent) {
 		try {
 			JSONParser parser = new JSONParser();
+			System.out.println("parseJSONContent: "+fileContent);
 			Object kategorieObject =  parser.parse(fileContent);
 			return (JSONObject) kategorieObject;
 		}
 		catch(ParseException e) {
+			System.out.println("parseJSONContent has Error");
 			System.out.println("Parsing JSON contet from File files: "+e);
 			return null;
 		}
 	}
 
+	/*
+	 * Params:
+	 * kategorieFile: the JSON-File-Object in the Windows explorer
+	 */
 	private String getFileContent(File kategorieFile) throws IOException {
 		Path path = Paths.get(kategorieFile.getAbsolutePath());
 		return String.join("\n", Files.readAllLines(path));
 	}
 
+	/*
+	 * Params:
+	 * cardKategorie:  
+	 */
 	private File getSpecificJSONFile(String cardKategorie) {
 		File[] datafiles = getJsonDataFiles();
 		File kategorieFile = null;
@@ -81,6 +140,9 @@ public class JsonDataManager {
 		return kategorieFile;
 	}
 	
+	/*
+	 * 
+	 */
 	public List<String> getKategorie() {
 		File[] JsonDatafiles = getJsonDataFiles();
 		List<String> DataFilesNames = new ArrayList<String>();
@@ -94,12 +156,18 @@ public class JsonDataManager {
 		return DataFilesNames;
 	}
 
+	/*
+	 * 
+	 */
 	private File[] getJsonDataFiles() {
 		File JsonDataDirectory = new File(storageURL);
 		File[] JsonDatafiles = JsonDataDirectory.listFiles();
 		return JsonDatafiles;
 	}
 	
+	/*
+	 * this needs to be extracted
+	 */
 	public boolean checkIfAnswerIsCorrect() {
 		return false;
 	}
