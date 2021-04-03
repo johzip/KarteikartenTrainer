@@ -35,7 +35,7 @@ public class JsonDataManager {
 		    String jsonText;
 		    obj.put("Frontside", cardData.getFrontSide());
 		    obj.put("Backside", cardData.getBackSide());
-		    obj.put("Learningphase", new Integer(0));
+		    obj.put("Learningphase", new Integer(1));
 		    jsonText = obj.toString();
 			String newFileConent = addJSONContent(getFileContent(kategorieFile), jsonText);
 		    addJsonEntry(kategorieFile.getAbsolutePath(), newFileConent);
@@ -76,9 +76,7 @@ public class JsonDataManager {
 	}
 
 
-	/*
-	 * Needs Work!!!
-	 * 
+	/* 
 	 * Adds a JSON-Object to an Existing JSON File.
 	 * Params:
 	 * absolutePath: absolute Path of the JSON File
@@ -102,19 +100,7 @@ public class JsonDataManager {
 	 * Params:
 	 * fileContent: Content of the JSON File
 	 */
-	private JSONObject parseJSONContent(String fileContent) {
-		try {
-			JSONParser parser = new JSONParser();
-			System.out.println("parseJSONContent: "+fileContent);
-			Object kategorieObject =  parser.parse(fileContent);
-			return (JSONObject) kategorieObject;
-		}
-		catch(ParseException e) {
-			System.out.println("parseJSONContent has Error");
-			System.out.println("Parsing JSON contet from File files: "+e);
-			return null;
-		}
-	}
+	
 
 	/*
 	 * Params:
@@ -164,12 +150,51 @@ public class JsonDataManager {
 		File[] JsonDatafiles = JsonDataDirectory.listFiles();
 		return JsonDatafiles;
 	}
+
+
+	public void openCard(int phase, String kategorie) {
+		File cardsDataFile = getSpecificJSONFile(kategorie);
+		List<CardData> cards = extractCardsFromDataFile(cardsDataFile, kategorie);
+		//fill data into GUI
+	}
+
+
+	private List<CardData> extractCardsFromDataFile(File cardsDataFile, String kategorie) {
+		try {
+			//parse hole File
+			JSONObject dataObject = parseJSONObjectContent(getFileContent(cardsDataFile));
+			JSONArray JasonCards = (JSONArray) dataObject.get("Cards");
+			List<CardData> cards = new ArrayList<CardData>();
+			for(int cardNr=0; cardNr<JasonCards.size(); cardNr++) {
+				JSONObject obj = (JSONObject) JasonCards.get(cardNr);
+				String frontSideInput = obj.get("Frontside").toString();
+				String backSideInput = obj.get("Backside").toString();
+				String topic = kategorie;
+				int learningphase = Integer.parseInt(obj.get("Learningphase").toString());
+				CardData card =new CardData(frontSideInput, backSideInput, topic, learningphase);
+				cards.add(card);
+			}
+			return cards;
+		} catch (IOException e) {
+			System.out.println("File of the Kategorie may not exist");
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
-	/*
-	 * this needs to be extracted
-	 */
-	public boolean checkIfAnswerIsCorrect() {
-		return false;
+	
+	private JSONObject parseJSONObjectContent(String fileContent) {
+		try {
+			JSONParser parser = new JSONParser();
+			//System.out.println("parseJSONContent: " + fileContent);
+			Object kategorieObject =  parser.parse(fileContent);
+			return (JSONObject) kategorieObject;
+		}
+		catch(ParseException e) {
+			System.out.println("parseJSONContent has Error");
+			System.out.println("Parsing JSON contet from File files: "+e);
+			return null;
+		}
 	}
 	
 }

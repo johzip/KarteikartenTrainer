@@ -7,10 +7,11 @@ public class CardData {
 	private String backSide;
 	private LocalDateTime timestamp;
 	private String topic;
+	private int phase;
 	
-	public CardData(String frontSideInput, String backSideInput, String pTopic) {
+	public CardData(String frontSideInput, String backSideInput, String pTopic, int pPhase) {
 		//TODO check Inputs for valuable contents
-		
+		this.phase = pPhase;
 		this.frontSide = frontSideInput;
 		this.backSide = backSideInput;
 		this.timestamp = LocalDateTime.now();
@@ -30,9 +31,8 @@ public class CardData {
 	public String getTopic() {
 		return topic;
 	}
-	public Object getID() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getPhase() {
+		return phase;
 	}	
 	
 }

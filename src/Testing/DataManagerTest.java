@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 class DataManagerTest {
 	
 	@Mock
-	private CardData testCard = new CardData("Baum", "Tree", "Englisch");
+	private CardData testCard = new CardData("Baum", "Tree", "Englisch",1);
 	
 	public DataManagerTest(){}
 	
@@ -29,7 +29,7 @@ class DataManagerTest {
 	@Test
 	void addCardTest() {
 		
-		assertEquals(true, testCard.getID());
+		
 	}
 	
 	
