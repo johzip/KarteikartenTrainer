@@ -1,17 +1,17 @@
 {
   "Cards": [
     {
-	"Learningphase":0,
+	"Learningphase":1,
 	"Frontside":"test123",
 	"Backside":"antwort456"
     },
     {
       "Frontside": "hello",
       "Backside": "hallo",
-      "Learningphase": 0
+      "Learningphase": 1
     },
     {
-      "Learningphase": 0,
+      "Learningphase": 1,
       "Frontside": "q4wegw",
       "Backside": "wg"
     }

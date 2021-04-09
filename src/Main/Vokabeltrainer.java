@@ -43,6 +43,14 @@ public class Vokabeltrainer {
 	private JPanel vocableEditorPanel;
 	private JPanel LearnPanel;
 	
+	
+	//Learn
+	private JEditorPane frontpageLearnPane;
+	
+	private List<CardData> cardQueue;
+	private int queueCounter = 0;
+	private CardData displayedCard;
+	
 	private List<String> KategoriesNames;
 	JsonDataManager dataManager;
 	/**
@@ -196,7 +204,7 @@ public class Vokabeltrainer {
 		JLabel lblKategorieLearn = new JLabel("Kategorie");
 		JComboBox<String> comboBoxKategorieLearn = new JComboBox<String>();
 		JPanel frontpageLearnPanel = new JPanel();
-		JEditorPane frontpageLearnPane = new JEditorPane();
+		frontpageLearnPane = new JEditorPane();
 		JPanel backpageLearnPanel = new JPanel();
 		JEditorPane backpageLearnPane = new JEditorPane();
 		JLabel lblPhaseLearn = new JLabel("Phase");
@@ -221,10 +229,13 @@ public class Vokabeltrainer {
 		comboBoxKategorieLearn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				dataManager.openCard( Integer.parseInt(comboBoxPhaseLearn.getSelectedItem().toString()), comboBoxKategorieLearn.getSelectedItem().toString());
+				int phase = Integer.parseInt(comboBoxPhaseLearn.getSelectedItem().toString());
+				String kategorie =comboBoxKategorieLearn.getSelectedItem().toString();
+				cardQueue = dataManager.loadCards( phase, kategorie);
+				startQueue();
 			}
+
 		});
-		
 		
 		frontpageLearnPanel.setBounds(17, 61, 942, 164);
 		frontpageLearnPanel.setLayout(null);
@@ -264,29 +275,61 @@ public class Vokabeltrainer {
 			{
 				int phase = Integer.parseInt(comboBoxPhaseLearn.getSelectedItem().toString());
 				String kategorie =comboBoxKategorieLearn.getSelectedItem().toString();
-				//System.out.println("phase: "+ phase + " | kategorie: " + kategorie);
-				dataManager.openCard( phase, kategorie);
+				cardQueue = dataManager.loadCards( phase, kategorie);
+				startQueue();
 			}
 		});
 		LearnPanel.add(comboBoxPhaseLearn);
+		
+		JButton btn_learn_next = new JButton("n\u00E4chstes");
+		btn_learn_next.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DisplayNextCard();
+			}
+		});
+		btn_learn_next.setBounds(820, 405, 131, 31);
+		LearnPanel.add(btn_learn_next);
+		
+		JButton btn_learn_Check = new JButton("\u00DCberpr\u00FCfen");
+		btn_learn_Check.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				checkifCorrectLearn();
+			}
+
+		});
+		btn_learn_Check.setBounds(672, 405, 131, 31);
+		LearnPanel.add(btn_learn_Check);
 		for(int phaseNr =1; phaseNr <=6 ; phaseNr++)
 			comboBoxPhaseLearn.addItem(""+phaseNr);
 		
 		
 	}
 	
+	private void DisplayNextCard() {
+		try {
+			displayedCard = this.cardQueue.get(queueCounter);
+			frontpageLearnPane.setText(displayedCard.getFrontSide());
+			queueCounter++;
+		}catch(IndexOutOfBoundsException ex) {
+			frontpageLearnPane.setText("Es giebt keine Karten mehr in der ausgewählten Phase, von dieser Kategorie");
+		}
+	}
+
+	private void checkifCorrectLearn() {
+		// TODO Auto-generated method stub
+		
+	}
 	
+	private void startQueue() {
+		for(CardData card : cardQueue)
+			System.out.println(card.getBackSide());
+		queueCounter = 0;
+		DisplayNextCard();
+	}
 	public void switchPanels(JPanel panel) {
-		System.out.println("hi");
 		layeredPane.removeAll();
 		layeredPane.add(panel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
 	}
-	
-	public void setCardQue(List<CardData> cards) {
-		//TODO set Card Que
-		//this.CardQue = 
-	}
-	
 }

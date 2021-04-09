@@ -152,10 +152,15 @@ public class JsonDataManager {
 	}
 
 
-	public void openCard(int phase, String kategorie) {
+	public List<CardData> loadCards(int phase, String kategorie) {
 		File cardsDataFile = getSpecificJSONFile(kategorie);
-		List<CardData> cards = extractCardsFromDataFile(cardsDataFile, kategorie);
-		//fill data into GUI
+		List<CardData> allCards = extractCardsFromDataFile(cardsDataFile, kategorie);
+		List<CardData> phaseCards = new ArrayList<CardData>();
+		for(CardData card:allCards) {
+			if(card.getPhase()==phase)
+				phaseCards.add(card);
+		}
+		return phaseCards;
 	}
 
 
@@ -197,4 +202,6 @@ public class JsonDataManager {
 		}
 	}
 	
+	// create New Kategorie
+	// {"Cards":[]}
 }
