@@ -44,10 +44,13 @@ public class Vokabeltrainer {
 	private JPanel vocableEditorPanel;
 	private JPanel LearnPanel;
 	
+	//backFront-Panel
+	private JEditorPane frontpagePane;
+	private JEditorPane backpagePane;
+	private JPanel editorPanel;
 	
-	//Learn
-	private JEditorPane frontpageLearnPane;
-	private JEditorPane backpageLearnPane;
+	
+	//Learn 
 	private List<CardData> cardQueue;
 	private int queueCounter = 0;
 	private CardData displayedCard;
@@ -134,16 +137,50 @@ public class Vokabeltrainer {
 			}
 		});
 		
+		//*******************FrontBackPanel*******************************
+		editorPanel = new JPanel();
+		layeredPane.setLayer(editorPanel, 4);
+		editorPanel.setLayout(null);
+		editorPanel.setBounds(17, 111, 941, 335);
+		layeredPane.add(editorPanel);
+		
+		JPanel frontpagePanel = new JPanel();
+		frontpagePanel.setLayout(null);
+		frontpagePanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Vorderseite", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		frontpagePanel.setBounds(0, 0, 937, 162);
+		editorPanel.add(frontpagePanel);
+		
+		frontpagePane = new JEditorPane();
+		frontpagePane.setForeground(Color.BLACK);
+		frontpagePane.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		frontpagePane.setBackground(Color.WHITE);
+		frontpagePane.setBounds(17, 29, 908, 116);
+		frontpagePane.setEnabled(false);
+		frontpagePane.setEditable(false);
+		frontpagePanel.add(frontpagePane);
+		
+		JPanel backpagePanel = new JPanel();
+		backpagePanel.setLayout(null);
+		backpagePanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "R\u00FCckseite", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		backpagePanel.setBounds(0, 165, 937, 169);
+		editorPanel.add(backpagePanel);
+		
+		backpagePane = new JEditorPane();
+		backpagePane.setForeground(Color.BLACK);
+		backpagePane.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		backpagePane.setBounds(17, 29, 908, 126);
+		backpagePanel.add(backpagePane);
+		
+		
+		
+		
 		
 		//*********************Editor*************************************
+		
 		
 		vocableEditorPanel = new JPanel();
 		JLabel lblKategorie = new JLabel("Kategorie");
 		JComboBox<String> comboBoxKategorie = new JComboBox<String>();
-		JPanel frontpageEditorPanel = new JPanel();
-		JEditorPane frontpageEditorPane = new JEditorPane();
-		JPanel backpageEditorPanel = new JPanel();
-		JEditorPane backpageEditorPane = new JEditorPane();
 		JButton btnAddVoc = new JButton("Add Voc");
 		
 		
@@ -165,36 +202,12 @@ public class Vokabeltrainer {
 			comboBoxKategorie.addItem(kategorie);
 		
 		
-		frontpageEditorPanel.setBounds(17, 61, 942, 164);
-		frontpageEditorPanel.setLayout(null);
-		frontpageEditorPanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Vorderseite", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		vocableEditorPanel.add(frontpageEditorPanel);
-		
-		
-		frontpageEditorPane.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		frontpageEditorPane.setForeground(Color.BLACK);
-		frontpageEditorPane.setBounds(17, 29, 908, 116);
-		frontpageEditorPanel.add(frontpageEditorPane);
-		
-		
-		backpageEditorPanel.setBounds(17, 226, 942, 175);
-		backpageEditorPanel.setLayout(null);
-		backpageEditorPanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "R\u00FCckseite", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		vocableEditorPanel.add(backpageEditorPanel);
-		
-		
-		backpageEditorPane.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		backpageEditorPane.setForeground(Color.BLACK);
-		backpageEditorPane.setBounds(17, 29, 908, 126);
-		backpageEditorPanel.add(backpageEditorPane);
-		
-		
 		btnAddVoc.setBounds(828, 407, 131, 31);
 		vocableEditorPanel.add(btnAddVoc);
 		btnAddVoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				dataManager.addCard(new CardData(frontpageEditorPane.getText(), backpageEditorPane.getText(), comboBoxKategorie.getSelectedItem().toString(),1));
+				dataManager.addCard(new CardData(frontpagePane.getText(), backpagePane.getText(), comboBoxKategorie.getSelectedItem().toString(),1));
 			}
 		});
 		
@@ -204,15 +217,11 @@ public class Vokabeltrainer {
 		JComboBox<String> comboBoxPhaseLearn = new JComboBox<String>();
 		JLabel lblKategorieLearn = new JLabel("Kategorie");
 		JComboBox<String> comboBoxKategorieLearn = new JComboBox<String>();
-		JPanel frontpageLearnPanel = new JPanel();
-		frontpageLearnPane = new JEditorPane();
-		JPanel backpageLearnPanel = new JPanel();
-		backpageLearnPane = new JEditorPane();
 		JLabel lblPhaseLearn = new JLabel("Phase");
 		
 		
 		LearnPanel.setBounds(0, 55, 975, 445);
-		layeredPane.setLayer(LearnPanel, 1);
+		layeredPane.setLayer(LearnPanel, 0);
 		layeredPane.add(LearnPanel);
 		LearnPanel.setLayout(null);
 		
@@ -237,32 +246,6 @@ public class Vokabeltrainer {
 			}
 
 		});
-		
-		frontpageLearnPanel.setBounds(17, 61, 942, 164);
-		frontpageLearnPanel.setLayout(null);
-		frontpageLearnPanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Vorderseite", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		LearnPanel.add(frontpageLearnPanel);
-		
-		
-		frontpageLearnPane.setForeground(Color.BLACK);
-		frontpageLearnPane.setBackground(Color.WHITE);
-		frontpageLearnPane.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		frontpageLearnPane.setEnabled(false);
-		frontpageLearnPane.setEditable(false);
-		frontpageLearnPane.setBounds(17, 29, 908, 116);
-		frontpageLearnPanel.add(frontpageLearnPane);
-		
-		
-		backpageLearnPanel.setBounds(17, 226, 942, 175);
-		backpageLearnPanel.setLayout(null);
-		backpageLearnPanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "R\u00FCckseite", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		LearnPanel.add(backpageLearnPanel);
-		
-		
-		backpageLearnPane.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		backpageLearnPane.setForeground(Color.BLACK);
-		backpageLearnPane.setBounds(17, 29, 908, 126);
-		backpageLearnPanel.add(backpageLearnPane);
 		
 		
 		lblPhaseLearn.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -300,6 +283,38 @@ public class Vokabeltrainer {
 		});
 		btn_learn_Check.setBounds(672, 405, 131, 31);
 		LearnPanel.add(btn_learn_Check);
+		
+		JPanel ExamPanel = new JPanel();
+		layeredPane.setLayer(ExamPanel, 1);
+		ExamPanel.setLayout(null);
+		ExamPanel.setBounds(0, 55, 975, 445);
+		layeredPane.add(ExamPanel);
+		
+		JLabel lblKategorieExam = new JLabel("Kategorie");
+		lblKategorieExam.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblKategorieExam.setBounds(615, 19, 82, 23);
+		ExamPanel.add(lblKategorieExam);
+		
+		JComboBox<String> comboBoxKategorieExam = new JComboBox<String>();
+		comboBoxKategorieExam.setBounds(717, 16, 242, 29);
+		ExamPanel.add(comboBoxKategorieExam);
+		
+		JLabel lblPhaseExam = new JLabel("Phase");
+		lblPhaseExam.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPhaseExam.setBounds(385, 19, 82, 23);
+		ExamPanel.add(lblPhaseExam);
+		
+		JComboBox<String> comboBoxPhaseExam = new JComboBox<String>();
+		comboBoxPhaseExam.setBounds(487, 16, 56, 29);
+		ExamPanel.add(comboBoxPhaseExam);
+		
+		JButton btn_exam_submit = new JButton("Abgaben");
+		btn_exam_submit.setBounds(820, 405, 131, 31);
+		ExamPanel.add(btn_exam_submit);
+		
+		JButton btn_exam_Correkt = new JButton("Korrekt");
+		btn_exam_Correkt.setBounds(672, 405, 131, 31);
+		ExamPanel.add(btn_exam_Correkt);
 		for(int phaseNr =1; phaseNr <=6 ; phaseNr++)
 			comboBoxPhaseLearn.addItem(""+phaseNr);
 		
@@ -307,22 +322,22 @@ public class Vokabeltrainer {
 	}
 	
 	private void DisplayNextCard() {
-		backpageLearnPane.setText("");
-		backpageLearnPane.setForeground(Color.BLACK);
+		backpagePane.setText("");
+		backpagePane.setForeground(Color.BLACK);
 		try {
 			displayedCard = this.cardQueue.get(queueCounter);
-			frontpageLearnPane.setText(displayedCard.getFrontSide());
+			frontpagePane.setText(displayedCard.getFrontSide());
 			queueCounter++;
 		}catch(IndexOutOfBoundsException ex) {
-			frontpageLearnPane.setText("Es giebt keine Karten mehr in der ausgewählten Phase, von dieser Kategorie");
+			frontpagePane.setText("Es giebt keine Karten mehr in der ausgewählten Phase, von dieser Kategorie");
 		}
 	}
 
 	private void checkifCorrectLearn() {
-		if(checkIfCorrect(backpageLearnPane.getText(), displayedCard.getBackSide())) {
-			backpageLearnPane.setForeground(Color.green);
+		if(checkIfCorrect(backpagePane.getText(), displayedCard.getBackSide())) {
+			backpagePane.setForeground(Color.green);
 		}else {
-			backpageLearnPane.setForeground(Color.red);
+			backpagePane.setForeground(Color.red);
 		}
 	}
 	
@@ -340,8 +355,18 @@ public class Vokabeltrainer {
 		
 	}
 	public void switchPanels(JPanel panel) {
+		backpagePane.setText("");
+		frontpagePane.setText("");
+		if(panel.equals(vocableEditorPanel)) {
+			frontpagePane.setEnabled(true);
+			frontpagePane.setEditable(true);
+		}else {
+			frontpagePane.setEnabled(false);
+			frontpagePane.setEditable(false);
+		}
 		layeredPane.removeAll();
 		layeredPane.add(panel);
+		layeredPane.add(editorPanel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
 	}

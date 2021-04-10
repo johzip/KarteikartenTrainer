@@ -69,7 +69,6 @@ public class JsonDataManager {
 
 	private boolean isFirstCard(String JSONString) {
 		String firstChar = JSONString.substring(0, 1);
-		System.out.println(firstChar);
 		if(firstChar.equals("]"))
 			return true;
 		return false;
