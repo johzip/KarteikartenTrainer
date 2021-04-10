@@ -34,6 +34,7 @@ import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLayeredPane;
+import java.awt.Color;
 
 public class Vokabeltrainer {
 	
@@ -46,7 +47,7 @@ public class Vokabeltrainer {
 	
 	//Learn
 	private JEditorPane frontpageLearnPane;
-	
+	private JEditorPane backpageLearnPane;
 	private List<CardData> cardQueue;
 	private int queueCounter = 0;
 	private CardData displayedCard;
@@ -206,7 +207,7 @@ public class Vokabeltrainer {
 		JPanel frontpageLearnPanel = new JPanel();
 		frontpageLearnPane = new JEditorPane();
 		JPanel backpageLearnPanel = new JPanel();
-		JEditorPane backpageLearnPane = new JEditorPane();
+		backpageLearnPane = new JEditorPane();
 		JLabel lblPhaseLearn = new JLabel("Phase");
 		
 		
@@ -306,6 +307,8 @@ public class Vokabeltrainer {
 	}
 	
 	private void DisplayNextCard() {
+		backpageLearnPane.setText("");
+		backpageLearnPane.setForeground(Color.BLACK);
 		try {
 			displayedCard = this.cardQueue.get(queueCounter);
 			frontpageLearnPane.setText(displayedCard.getFrontSide());
@@ -316,15 +319,25 @@ public class Vokabeltrainer {
 	}
 
 	private void checkifCorrectLearn() {
-		// TODO Auto-generated method stub
-		
+		if(checkIfCorrect(backpageLearnPane.getText(), displayedCard.getBackSide())) {
+			backpageLearnPane.setForeground(Color.green);
+		}else {
+			backpageLearnPane.setForeground(Color.red);
+		}
 	}
 	
+	private boolean checkIfCorrect(String input, String correctAnswer) {
+		if(input.equals(correctAnswer))
+			return true;
+		return false;
+	}
+
 	private void startQueue() {
-		for(CardData card : cardQueue)
-			System.out.println(card.getBackSide());
+		//for(CardData card : cardQueue)
+		//	System.out.println(card.getBackSide());
 		queueCounter = 0;
 		DisplayNextCard();
+		
 	}
 	public void switchPanels(JPanel panel) {
 		layeredPane.removeAll();
