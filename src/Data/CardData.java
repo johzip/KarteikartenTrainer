@@ -1,12 +1,11 @@
 package Data;
 
-import java.time.*;
 
 public class CardData {
 	private String frontSide;
 	private String backSide;
-	private LocalDateTime timestamp;
 	private String topic;
+	private int id;
 	private int phase;
 	
 	public CardData(String frontSideInput, String backSideInput, String pTopic, int pPhase) {
@@ -14,13 +13,12 @@ public class CardData {
 		this.phase = pPhase;
 		this.frontSide = frontSideInput;
 		this.backSide = backSideInput;
-		this.timestamp = LocalDateTime.now();
 		this.topic = pTopic;
 	}
 
 	//Getters
-	public LocalDateTime getTimestamp() {
-		return timestamp;
+	public int getID() {
+		return id;
 	}
 	public String getBackSide() {
 		return backSide;
@@ -33,6 +31,5 @@ public class CardData {
 	}
 	public int getPhase() {
 		return phase;
-	}	
-	
+	}
 }

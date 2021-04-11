@@ -22,6 +22,8 @@ import org.json.simple.parser.ParseException;
 public class JsonDataManager {
 	
 	private String storageURL = System.getProperty("user.dir") + "\\JSON_Data" ;
+	private static int idCounter=getIDCounter();
+	
 	
 	/*
 	 * Adds a new Card to the acoording Json File defined by the Topic.
@@ -39,6 +41,8 @@ public class JsonDataManager {
 		    obj.put("Frontside", cardData.getFrontSide());
 		    obj.put("Backside", cardData.getBackSide());
 		    obj.put("Learningphase", new Integer(1));
+		    obj.put("Id", idCounter++);
+		    incrementIDCounter();
 		    jsonText = obj.toString();
 			String newFileConent = addJSONContent(getFileContent(kategorieFile), jsonText);
 		    addJsonEntry(kategorieFile.getAbsolutePath(), newFileConent);
@@ -53,7 +57,16 @@ public class JsonDataManager {
 		}
 	}
 	
+	private void incrementIDCounter() {
+		//TODO: increment the Counter in counter.txt
+	}
 	
+	private static int getIDCounter() {
+		//TODO: read Counter in counter.txt
+		return 0;
+	}
+
+
 	/*
 	 * Combines the to Strings
 	 * params: 
@@ -219,5 +232,11 @@ public class JsonDataManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public void incrementPhase(CardData displayedCard) {
+		// TODO Auto-generated method stub
+		
 	}
 }

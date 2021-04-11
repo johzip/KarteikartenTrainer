@@ -54,6 +54,7 @@ public class Vokabeltrainer {
 	//Exam
 	private JButton btn_exam_Correkt;
 	private JButton btn_exam_submit;
+	private Boolean isChecked = false;
 	
 	//Learn 
 	private List<CardData> cardQueue;
@@ -225,9 +226,6 @@ public class Vokabeltrainer {
 		fillKathegorieBoxes(jsonDataManager, comboBoxKategorie);
 		
 		
-		btnAddVoc.setBounds(828, 407, 131, 31);
-		vocableEditorPanel.add(btnAddVoc);
-		
 		textAddKategorie = new JTextField();
 		textAddKategorie.setBounds(369, 16, 166, 29);
 		vocableEditorPanel.add(textAddKategorie);
@@ -242,10 +240,15 @@ public class Vokabeltrainer {
 		});
 		btnAddKategorie.setBounds(535, 16, 46, 29);
 		vocableEditorPanel.add(btnAddKategorie);
+		
+		btnAddVoc.setBounds(828, 407, 131, 31);
+		vocableEditorPanel.add(btnAddVoc);
 		btnAddVoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 				dataManager.addCard(new CardData(frontpagePane.getText(), backpagePane.getText(), comboBoxKategorie.getSelectedItem().toString(),1));
+				frontpagePane.setText("");
+				backpagePane.setText("");
 			}
 		});
 		
@@ -292,7 +295,7 @@ public class Vokabeltrainer {
 		JButton btn_learn_next = new JButton("n\u00E4chstes");
 		btn_learn_next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DisplayNextCard();
+				displayNextCard();
 			}
 		});
 		btn_learn_next.setBounds(820, 405, 131, 31);
@@ -313,7 +316,7 @@ public class Vokabeltrainer {
 		examPanel = new JPanel();
 		
 		
-		layeredPane.setLayer(examPanel, 1);
+		layeredPane.setLayer(examPanel, 3);
 		examPanel.setLayout(null);
 		examPanel.setBounds(0, 55, 975, 445);
 		layeredPane.add(examPanel);
@@ -351,7 +354,12 @@ public class Vokabeltrainer {
 		btn_exam_submit = new JButton("Abgaben");
 		btn_exam_submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: chech if correct and decrease increase Phase
+				if(!isChecked) {
+					checkifCorrectExam();
+				}else {
+					dataManager.incrementPhase(displayedCard);
+					displayNextCard();
+				}
 			}
 		});
 		btn_exam_submit.setBounds(820, 405, 131, 31);
@@ -360,7 +368,8 @@ public class Vokabeltrainer {
 		btn_exam_Correkt = new JButton("Korrekt");
 		btn_exam_Correkt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				checkifCorrectExam();
+				dataManager.incrementPhase(displayedCard);
+				displayNextCard();
 			}
 
 		});
@@ -377,7 +386,8 @@ public class Vokabeltrainer {
 			comboBoxKategorieLearn.addItem(kategorie);
 	}
 	
-	private void DisplayNextCard() {
+	private void displayNextCard() {
+		isChecked = false;
 		backpagePane.setText("");
 		backpagePane.setForeground(Color.BLACK);
 		try {
@@ -402,12 +412,12 @@ public class Vokabeltrainer {
 	private void checkifCorrectExam() {
 		if(checkIfCorrect(backpagePane.getText(), displayedCard.getBackSide())) {
 			backpagePane.setForeground(Color.green);
-			
 		}else {
 			backpagePane.setForeground(Color.red);
 			btn_exam_Correkt.setEnabled(true);
 		}
 		btn_exam_submit.setText("Nächstes");
+		isChecked = true;
 	}
 	
 	private boolean checkIfCorrect(String input, String correctAnswer) {
@@ -420,7 +430,7 @@ public class Vokabeltrainer {
 		//for(CardData card : cardQueue)
 		//	System.out.println(card.getBackSide());
 		queueCounter = 0;
-		DisplayNextCard();
+		displayNextCard();
 		
 	}
 	
