@@ -42,13 +42,18 @@ public class Vokabeltrainer {
 	private JFrame frame;
 	private JLayeredPane layeredPane;
 	private JPanel vocableEditorPanel;
-	private JPanel LearnPanel;
+	private JPanel learnPanel;
+	private JLabel pageTitle;
+	private JPanel examPanel;
 	
 	//backFront-Panel
 	private JEditorPane frontpagePane;
 	private JEditorPane backpagePane;
 	private JPanel editorPanel;
 	
+	//Exam
+	private JButton btn_exam_Correkt;
+	private JButton btn_exam_submit;
 	
 	//Learn 
 	private List<CardData> cardQueue;
@@ -57,6 +62,7 @@ public class Vokabeltrainer {
 	
 	private List<String> KategoriesNames;
 	JsonDataManager dataManager;
+	private JTextField textAddKategorie;
 	/**
 	 * Launch the application.
 	 */
@@ -87,24 +93,48 @@ public class Vokabeltrainer {
 	private void initialize() {
 		Data.JsonDataManager jsonDataManager = new Data.JsonDataManager();
 		
+		//****************LEARN*************************
+		learnPanel = new JPanel();
+		JComboBox<String> comboBoxPhaseLearn = new JComboBox<String>();
+		JLabel lblKategorieLearn = new JLabel("Kategorie");
+		JComboBox<String> comboBoxKategorieLearn = new JComboBox<String>();
+		JLabel lblPhaseLearn = new JLabel("Phase");
+		
+		//***************EXAM***************************
+		JLabel lblKategorieExam = new JLabel("Kategorie");
+		JComboBox<String> comboBoxKategorieExam = new JComboBox<String>();
+		JLabel lblPhaseExam = new JLabel("Phase");
+		JComboBox<String> comboBoxPhaseExam = new JComboBox<String>();
+		
+		//***************EDITOR*************************
+		vocableEditorPanel = new JPanel();
+		JLabel lblKategorie = new JLabel("Kategorie");
+		JComboBox<String> comboBoxKategorie = new JComboBox<String>();
+		JButton btnAddVoc = new JButton("Add Voc");
+		
+		
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1000, 601);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 				
-		JLabel pageTitle = new JLabel("Vokabeleditor");
+		pageTitle = new JLabel("Vokabeltrainer");
+		pageTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		pageTitle.setFont(new Font("Arial", Font.PLAIN, 27));
-		pageTitle.setBounds(394, 45, 186, 42);
+		pageTitle.setBounds(375, 45, 212, 42);
 		frame.getContentPane().add(pageTitle);
 		
 		
 		//*********************Menue*************************************
 		
 		layeredPane = new JLayeredPane();
-		frame.getContentPane().add(layeredPane, BorderLayout.CENTER);
+		layeredPane.setBounds(0, 35, 976, 502);
+		frame.getContentPane().add(layeredPane);
 		
 		JMenuBar menuBar = new JMenuBar();
-		frame.getContentPane().add(menuBar, BorderLayout.NORTH);
+		menuBar.setBounds(0, 0, 976, 35);
+		frame.getContentPane().add(menuBar);
 		
 		JMenu menu = new JMenu("Men\u00FC");
 		menuBar.add(menu);
@@ -113,7 +143,8 @@ public class Vokabeltrainer {
 		menuItemLearn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 				{
-					switchPanels(LearnPanel);
+					switchPanels(learnPanel);
+					updateCardView(comboBoxKategorieLearn, comboBoxPhaseLearn);
 				}
 			});
 		menu.add(menuItemLearn);
@@ -124,7 +155,8 @@ public class Vokabeltrainer {
 		menuItemExam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				//switchPanels(ExamPanel);
+				switchPanels(examPanel);
+				updateCardView(comboBoxKategorieExam, comboBoxPhaseExam);
 			}
 		});
 		
@@ -177,14 +209,7 @@ public class Vokabeltrainer {
 		
 		//*********************Editor*************************************
 		
-		
-		vocableEditorPanel = new JPanel();
-		JLabel lblKategorie = new JLabel("Kategorie");
-		JComboBox<String> comboBoxKategorie = new JComboBox<String>();
-		JButton btnAddVoc = new JButton("Add Voc");
-		
-		
-		layeredPane.setLayer(vocableEditorPanel, 0);
+		layeredPane.setLayer(vocableEditorPanel, 2);
 		vocableEditorPanel.setBounds(0, 55, 975, 445);
 		layeredPane.add(vocableEditorPanel);
 		vocableEditorPanel.setLayout(null);
@@ -197,13 +222,26 @@ public class Vokabeltrainer {
 		
 		comboBoxKategorie.setBounds(717, 16, 242, 29);
 		vocableEditorPanel.add(comboBoxKategorie);
-		KategoriesNames = jsonDataManager.getKategorie();
-		for(String kategorie : KategoriesNames)
-			comboBoxKategorie.addItem(kategorie);
+		fillKathegorieBoxes(jsonDataManager, comboBoxKategorie);
 		
 		
 		btnAddVoc.setBounds(828, 407, 131, 31);
 		vocableEditorPanel.add(btnAddVoc);
+		
+		textAddKategorie = new JTextField();
+		textAddKategorie.setBounds(369, 16, 166, 29);
+		vocableEditorPanel.add(textAddKategorie);
+		textAddKategorie.setColumns(10);
+		
+		JButton btnAddKategorie = new JButton("+");
+		btnAddKategorie.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dataManager.addKategorie(textAddKategorie.getText());
+				fillKathegorieBoxes(jsonDataManager, comboBoxKategorie);
+			}
+		});
+		btnAddKategorie.setBounds(535, 16, 46, 29);
+		vocableEditorPanel.add(btnAddKategorie);
 		btnAddVoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -213,57 +251,43 @@ public class Vokabeltrainer {
 		
 		//*********************Learn*************************************
 		
-		LearnPanel = new JPanel();
-		JComboBox<String> comboBoxPhaseLearn = new JComboBox<String>();
-		JLabel lblKategorieLearn = new JLabel("Kategorie");
-		JComboBox<String> comboBoxKategorieLearn = new JComboBox<String>();
-		JLabel lblPhaseLearn = new JLabel("Phase");
 		
-		
-		LearnPanel.setBounds(0, 55, 975, 445);
-		layeredPane.setLayer(LearnPanel, 0);
-		layeredPane.add(LearnPanel);
-		LearnPanel.setLayout(null);
+		learnPanel.setBounds(0, 55, 975, 445);
+		layeredPane.setLayer(learnPanel, 0);
+		layeredPane.add(learnPanel);
+		learnPanel.setLayout(null);
 		
 		
 		lblKategorieLearn.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblKategorieLearn.setBounds(615, 19, 82, 23);
-		LearnPanel.add(lblKategorieLearn);
+		learnPanel.add(lblKategorieLearn);
 		
 		
 		comboBoxKategorieLearn.setBounds(717, 16, 242, 29);
-		LearnPanel.add(comboBoxKategorieLearn);
-		KategoriesNames = jsonDataManager.getKategorie();
-		for(String kategorie : KategoriesNames)
-			comboBoxKategorieLearn.addItem(kategorie);
+		learnPanel.add(comboBoxKategorieLearn);
+		fillKathegorieBoxes(jsonDataManager, comboBoxKategorieLearn);
 		comboBoxKategorieLearn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				int phase = Integer.parseInt(comboBoxPhaseLearn.getSelectedItem().toString());
-				String kategorie =comboBoxKategorieLearn.getSelectedItem().toString();
-				cardQueue = dataManager.loadCards( phase, kategorie);
-				startQueue();
+				updateCardView(comboBoxKategorieLearn, comboBoxPhaseLearn);
 			}
 
 		});
 		
-		
 		lblPhaseLearn.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPhaseLearn.setBounds(385, 19, 82, 23);
-		LearnPanel.add(lblPhaseLearn);
-		
+		learnPanel.add(lblPhaseLearn);
 		
 		comboBoxPhaseLearn.setBounds(487, 16, 56, 29);
 		comboBoxPhaseLearn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				int phase = Integer.parseInt(comboBoxPhaseLearn.getSelectedItem().toString());
-				String kategorie =comboBoxKategorieLearn.getSelectedItem().toString();
-				cardQueue = dataManager.loadCards( phase, kategorie);
-				startQueue();
+				updateCardView(comboBoxKategorieLearn, comboBoxPhaseLearn);
 			}
 		});
-		LearnPanel.add(comboBoxPhaseLearn);
+		learnPanel.add(comboBoxPhaseLearn);
+		for(int phaseNr =1; phaseNr <=6 ; phaseNr++)
+			comboBoxPhaseLearn.addItem(""+phaseNr);
 		
 		JButton btn_learn_next = new JButton("n\u00E4chstes");
 		btn_learn_next.addActionListener(new ActionListener() {
@@ -272,7 +296,7 @@ public class Vokabeltrainer {
 			}
 		});
 		btn_learn_next.setBounds(820, 405, 131, 31);
-		LearnPanel.add(btn_learn_next);
+		learnPanel.add(btn_learn_next);
 		
 		JButton btn_learn_Check = new JButton("\u00DCberpr\u00FCfen");
 		btn_learn_Check.addActionListener(new ActionListener() {
@@ -282,43 +306,75 @@ public class Vokabeltrainer {
 
 		});
 		btn_learn_Check.setBounds(672, 405, 131, 31);
-		LearnPanel.add(btn_learn_Check);
+		learnPanel.add(btn_learn_Check);
 		
-		JPanel ExamPanel = new JPanel();
-		layeredPane.setLayer(ExamPanel, 1);
-		ExamPanel.setLayout(null);
-		ExamPanel.setBounds(0, 55, 975, 445);
-		layeredPane.add(ExamPanel);
 		
-		JLabel lblKategorieExam = new JLabel("Kategorie");
+		//******************************EXAM*****************************
+		examPanel = new JPanel();
+		
+		
+		layeredPane.setLayer(examPanel, 1);
+		examPanel.setLayout(null);
+		examPanel.setBounds(0, 55, 975, 445);
+		layeredPane.add(examPanel);
+		
 		lblKategorieExam.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblKategorieExam.setBounds(615, 19, 82, 23);
-		ExamPanel.add(lblKategorieExam);
+		examPanel.add(lblKategorieExam);
 		
-		JComboBox<String> comboBoxKategorieExam = new JComboBox<String>();
 		comboBoxKategorieExam.setBounds(717, 16, 242, 29);
-		ExamPanel.add(comboBoxKategorieExam);
+		examPanel.add(comboBoxKategorieExam);
+		fillKathegorieBoxes(jsonDataManager, comboBoxKategorieExam);
+		comboBoxKategorieExam.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				updateCardView(comboBoxKategorieExam, comboBoxPhaseExam);
+			}
+
+		});
 		
-		JLabel lblPhaseExam = new JLabel("Phase");
 		lblPhaseExam.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPhaseExam.setBounds(385, 19, 82, 23);
-		ExamPanel.add(lblPhaseExam);
+		examPanel.add(lblPhaseExam);
 		
-		JComboBox<String> comboBoxPhaseExam = new JComboBox<String>();
 		comboBoxPhaseExam.setBounds(487, 16, 56, 29);
-		ExamPanel.add(comboBoxPhaseExam);
-		
-		JButton btn_exam_submit = new JButton("Abgaben");
-		btn_exam_submit.setBounds(820, 405, 131, 31);
-		ExamPanel.add(btn_exam_submit);
-		
-		JButton btn_exam_Correkt = new JButton("Korrekt");
-		btn_exam_Correkt.setBounds(672, 405, 131, 31);
-		ExamPanel.add(btn_exam_Correkt);
+		examPanel.add(comboBoxPhaseExam);
 		for(int phaseNr =1; phaseNr <=6 ; phaseNr++)
-			comboBoxPhaseLearn.addItem(""+phaseNr);
+			comboBoxPhaseExam.addItem(""+phaseNr);
+		comboBoxPhaseExam.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				updateCardView(comboBoxKategorieExam, comboBoxPhaseExam);
+			}
+		});
 		
+		btn_exam_submit = new JButton("Abgaben");
+		btn_exam_submit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO: chech if correct and decrease increase Phase
+			}
+		});
+		btn_exam_submit.setBounds(820, 405, 131, 31);
+		examPanel.add(btn_exam_submit);
 		
+		btn_exam_Correkt = new JButton("Korrekt");
+		btn_exam_Correkt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				checkifCorrectExam();
+			}
+
+		});
+		btn_exam_Correkt.setBounds(672, 405, 131, 31);
+		examPanel.add(btn_exam_Correkt);
+		btn_exam_Correkt.setEnabled(false);
+		
+		switchPanels(vocableEditorPanel);
+	}
+
+	private void fillKathegorieBoxes(Data.JsonDataManager jsonDataManager, JComboBox<String> comboBoxKategorieLearn) {
+		KategoriesNames = jsonDataManager.getKategorie();
+		for(String kategorie : KategoriesNames)
+			comboBoxKategorieLearn.addItem(kategorie);
 	}
 	
 	private void DisplayNextCard() {
@@ -333,12 +389,25 @@ public class Vokabeltrainer {
 		}
 	}
 
+	//TODO: hier refactor in eigene Klasse oder dahin wo aufgerufen du HUND
 	private void checkifCorrectLearn() {
 		if(checkIfCorrect(backpagePane.getText(), displayedCard.getBackSide())) {
 			backpagePane.setForeground(Color.green);
 		}else {
 			backpagePane.setForeground(Color.red);
 		}
+	}
+	
+	//TODO: hier refactor in eigene Klasse oder dahin wo aufgerufen du HUND
+	private void checkifCorrectExam() {
+		if(checkIfCorrect(backpagePane.getText(), displayedCard.getBackSide())) {
+			backpagePane.setForeground(Color.green);
+			
+		}else {
+			backpagePane.setForeground(Color.red);
+			btn_exam_Correkt.setEnabled(true);
+		}
+		btn_exam_submit.setText("Nächstes");
 	}
 	
 	private boolean checkIfCorrect(String input, String correctAnswer) {
@@ -354,13 +423,26 @@ public class Vokabeltrainer {
 		DisplayNextCard();
 		
 	}
+	
+	private void updateCardView(JComboBox<String> comboBoxKategorieExam, JComboBox<String> comboBoxPhaseExam) {
+		int phase = Integer.parseInt(comboBoxPhaseExam.getSelectedItem().toString());
+		String kategorie =comboBoxKategorieExam.getSelectedItem().toString();
+		cardQueue = dataManager.loadCards( phase, kategorie);
+		startQueue();
+	}
+	
 	public void switchPanels(JPanel panel) {
 		backpagePane.setText("");
 		frontpagePane.setText("");
 		if(panel.equals(vocableEditorPanel)) {
 			frontpagePane.setEnabled(true);
 			frontpagePane.setEditable(true);
+			pageTitle.setText("Vokabeleditor");
 		}else {
+			if(panel.equals(learnPanel))
+				pageTitle.setText("Übungsmodus");
+			else
+				pageTitle.setText("Prüfungsmodus");
 			frontpagePane.setEnabled(false);
 			frontpagePane.setEditable(false);
 		}

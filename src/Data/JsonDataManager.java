@@ -2,7 +2,10 @@ package Data;
 //This class uses the Libary JSON.simple from https://code.google.com/archive/p/json-simple/downloads
 
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -88,7 +91,6 @@ public class JsonDataManager {
 			bw.newLine();   
 			bw.close();
 		}catch (IOException e1) {
-			// TODO Auto-generated catch block
 			System.out.println("addJsonEntry has Error");
 			e1.printStackTrace();
 		}
@@ -165,7 +167,6 @@ public class JsonDataManager {
 
 	private List<CardData> extractCardsFromDataFile(File cardsDataFile, String kategorie) {
 		try {
-			//parse hole File
 			JSONObject dataObject = parseJSONObjectContent(getFileContent(cardsDataFile));
 			JSONArray JasonCards = (JSONArray) dataObject.get("Cards");
 			List<CardData> cards = new ArrayList<CardData>();
@@ -200,7 +201,23 @@ public class JsonDataManager {
 			return null;
 		}
 	}
-	
-	// create New Kategorie
-	// {"Cards":[]}
+
+
+	public void addKategorie(String text) {
+		File newJSONfile = new File (storageURL, (""+text+".json"));
+		try(FileOutputStream fStream = new FileOutputStream(newJSONfile);
+			    DataOutputStream data0 = new DataOutputStream(fStream)) {
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try (FileWriter fw = new FileWriter(newJSONfile);
+			       BufferedWriter bw = new BufferedWriter(fw)){
+			bw.write("{\"Cards\":[]}");
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
