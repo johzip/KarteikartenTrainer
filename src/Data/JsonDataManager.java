@@ -22,9 +22,11 @@ import org.json.simple.parser.ParseException;
 public class JsonDataManager {
 	
 	private String storageURL = System.getProperty("user.dir") + "\\JSON_Data" ;
-	private static int idCounter=getIDCounter();
+	private static int idCounter;
 	
-	
+	public JsonDataManager(){
+		idCounter=getIDCounter();
+	}
 	/*
 	 * Adds a new Card to the acoording Json File defined by the Topic.
 	 * By extracting all Data from the CardData Object 
@@ -42,10 +44,10 @@ public class JsonDataManager {
 		    obj.put("Backside", cardData.getBackSide());
 		    obj.put("Learningphase", new Integer(1));
 		    obj.put("Id", idCounter++);
-		    incrementIDCounter();
 		    jsonText = obj.toString();
 			String newFileConent = addJSONContent(getFileContent(kategorieFile), jsonText);
 		    addJsonEntry(kategorieFile.getAbsolutePath(), newFileConent);
+		    incrementIDCounter();
 		}
 		catch(NullPointerException e2) {
 			System.out.println("addCard has Error");
@@ -58,12 +60,31 @@ public class JsonDataManager {
 	}
 	
 	private void incrementIDCounter() {
-		//TODO: increment the Counter in counter.txt
+		idCounter++;
+		File idCounterFile = getCounterTXT();
+		addJsonEntry(idCounterFile.getAbsolutePath(),""+idCounter);
+	}
+	private File getCounterTXT() {
+		File[] dataFiles = getJsonDataFiles();
+		for(File datafile : dataFiles) {
+			if(datafile.getName().equals("counter.txt")) {
+				return datafile;
+			}
+		}
+		return null;
 	}
 	
-	private static int getIDCounter() {
-		//TODO: read Counter in counter.txt
-		return 0;
+	private int getIDCounter() {
+		File idCounterFile= getCounterTXT();
+		try {
+			String contentCounterFile = getFileContent(idCounterFile);
+			return Integer.parseInt(contentCounterFile);
+			
+		} catch (IOException e) {
+			System.out.println("getIDCounter has Error");
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 

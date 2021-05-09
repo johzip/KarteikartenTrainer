@@ -84,7 +84,6 @@ public class Vokabeltrainer {
 	 * Create the application.
 	 */
 	public Vokabeltrainer() {
-		dataManager = new JsonDataManager();
 		initialize();
 	}
 
@@ -92,7 +91,7 @@ public class Vokabeltrainer {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		Data.JsonDataManager jsonDataManager = new Data.JsonDataManager();
+		dataManager = new JsonDataManager();
 		
 		//****************LEARN*************************
 		learnPanel = new JPanel();
@@ -223,7 +222,7 @@ public class Vokabeltrainer {
 		
 		comboBoxKategorie.setBounds(717, 16, 242, 29);
 		vocableEditorPanel.add(comboBoxKategorie);
-		fillKathegorieBoxes(jsonDataManager, comboBoxKategorie);
+		fillKathegorieBoxes(dataManager, comboBoxKategorie);
 		
 		
 		textAddKategorie = new JTextField();
@@ -235,7 +234,7 @@ public class Vokabeltrainer {
 		btnAddKategorie.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dataManager.addKategorie(textAddKategorie.getText());
-				fillKathegorieBoxes(jsonDataManager, comboBoxKategorie);
+				fillKathegorieBoxes(dataManager, comboBoxKategorie);
 			}
 		});
 		btnAddKategorie.setBounds(535, 16, 46, 29);
@@ -268,7 +267,7 @@ public class Vokabeltrainer {
 		
 		comboBoxKategorieLearn.setBounds(717, 16, 242, 29);
 		learnPanel.add(comboBoxKategorieLearn);
-		fillKathegorieBoxes(jsonDataManager, comboBoxKategorieLearn);
+		fillKathegorieBoxes(dataManager, comboBoxKategorieLearn);
 		comboBoxKategorieLearn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -327,7 +326,7 @@ public class Vokabeltrainer {
 		
 		comboBoxKategorieExam.setBounds(717, 16, 242, 29);
 		examPanel.add(comboBoxKategorieExam);
-		fillKathegorieBoxes(jsonDataManager, comboBoxKategorieExam);
+		fillKathegorieBoxes(dataManager, comboBoxKategorieExam);
 		comboBoxKategorieExam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
