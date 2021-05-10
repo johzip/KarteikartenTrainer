@@ -356,8 +356,9 @@ public class Vokabeltrainer {
 				if(!isChecked) {
 					checkifCorrectExam();
 				}else {
-					dataManager.incrementPhase(displayedCard);
+					dataManager.changePhase(displayedCard,false);
 					displayNextCard();
+					btn_exam_Correkt.setEnabled(false);
 				}
 			}
 		});
@@ -367,8 +368,9 @@ public class Vokabeltrainer {
 		btn_exam_Correkt = new JButton("Korrekt");
 		btn_exam_Correkt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dataManager.incrementPhase(displayedCard);
+				dataManager.changePhase(displayedCard,true);
 				displayNextCard();
+				btn_exam_Correkt.setEnabled(false);
 			}
 
 		});
@@ -411,6 +413,7 @@ public class Vokabeltrainer {
 	private void checkifCorrectExam() {
 		if(checkIfCorrect(backpagePane.getText(), displayedCard.getBackSide())) {
 			backpagePane.setForeground(Color.green);
+			dataManager.changePhase(displayedCard,true);
 		}else {
 			backpagePane.setForeground(Color.red);
 			btn_exam_Correkt.setEnabled(true);

@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 class DataManagerTest {
 	
 	@Mock
-	private CardData testCard = new CardData("Baum", "Tree", "Englisch",1);
+	private CardData testCard = new CardData("Baum", "Tree", "Englisch",1,5);
 	
 	public DataManagerTest(){}
 	

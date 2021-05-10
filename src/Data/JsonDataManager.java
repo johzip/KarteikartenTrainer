@@ -43,7 +43,7 @@ public class JsonDataManager {
 		    obj.put("Frontside", cardData.getFrontSide());
 		    obj.put("Backside", cardData.getBackSide());
 		    obj.put("Learningphase", new Integer(1));
-		    obj.put("Id", idCounter++);
+		    obj.put("Id", idCounter+1);
 		    jsonText = obj.toString();
 			String newFileConent = addJSONContent(getFileContent(kategorieFile), jsonText);
 		    addJsonEntry(kategorieFile.getAbsolutePath(), newFileConent);
@@ -85,6 +85,32 @@ public class JsonDataManager {
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	
+	public void changePhase(CardData displeayedCard, boolean increment){
+		File kategorieFile = this.getSpecificJSONFile(displeayedCard.getTopic());
+		List<CardData> allCards = extractCardsFromDataFile(kategorieFile, displeayedCard.getTopic());
+		String currentContentOfNewFile = "{\"Cards\":[]}";
+		
+		for(CardData card : allCards) {
+			if(card.getID() == displeayedCard.getID()) {
+				if(increment) {
+					card.incrementPhase();
+				}else {
+					card.resetPhase();
+				}
+			}
+			JSONObject obj = new JSONObject();
+		    String jsonText;
+		    obj.put("Frontside", card.getFrontSide());
+		    obj.put("Backside", card.getBackSide());
+		    obj.put("Learningphase", card.getPhase());
+		    obj.put("Id", card.getID());
+		    jsonText = obj.toString();
+		    currentContentOfNewFile = addJSONContent(currentContentOfNewFile, jsonText);
+		}
+		addJsonEntry(kategorieFile.getAbsolutePath(), currentContentOfNewFile);
 	}
 
 
@@ -186,7 +212,7 @@ public class JsonDataManager {
 		return JsonDatafiles;
 	}
 
-
+	
 	public List<CardData> loadCards(int phase, String kategorie) {
 		File cardsDataFile = getSpecificJSONFile(kategorie);
 		List<CardData> allCards = extractCardsFromDataFile(cardsDataFile, kategorie);
@@ -208,9 +234,10 @@ public class JsonDataManager {
 				JSONObject obj = (JSONObject) JasonCards.get(cardNr);
 				String frontSideInput = obj.get("Frontside").toString();
 				String backSideInput = obj.get("Backside").toString();
+				int id = Integer.parseInt(obj.get("Id").toString());
 				String topic = kategorie;
 				int learningphase = Integer.parseInt(obj.get("Learningphase").toString());
-				CardData card =new CardData(frontSideInput, backSideInput, topic, learningphase);
+				CardData card =new CardData(frontSideInput, backSideInput, topic, learningphase, id);
 				cards.add(card);
 			}
 			return cards;
@@ -254,10 +281,5 @@ public class JsonDataManager {
 			e.printStackTrace();
 		}
 	}
-
-
-	public void incrementPhase(CardData displayedCard) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }
