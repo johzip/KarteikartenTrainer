@@ -18,8 +18,8 @@ import javax.swing.Box;
 import java.awt.Component;
 import javax.swing.border.TitledBorder;
 
-import Data.CardData;
-import Data.JsonDataManager;
+import Application.JsonDataManager;
+import Domain.CardData;
 
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -55,9 +55,8 @@ public class VokabeltrainerGUI {
 	private JButton btn_exam_Correkt;
 	private JButton btn_exam_submit;
 	private Boolean isChecked = false;
+	public List<CardData> cardQueue;
 	
-	//Learn 
-	private List<CardData> cardQueue;
 	private int queueCounter = 0;
 	private CardData displayedCard;
 	
@@ -220,9 +219,9 @@ public class VokabeltrainerGUI {
 		JButton btnAddKategorie = new JButton("+");
 		btnAddKategorie.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dataManager.addKategorie(textAddKategorie.getText());
-				fillKathegorieBoxes(dataManager, comboBoxKategorie);
+				addKategorie(comboBoxKategorie);
 			}
+
 		});
 		btnAddKategorie.setBounds(535, 16, 46, 29);
 		vocableEditorPanel.add(btnAddKategorie);
@@ -232,10 +231,9 @@ public class VokabeltrainerGUI {
 		btnAddVoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				dataManager.addCard(new CardData(frontpagePane.getText(), backpagePane.getText(), comboBoxKategorie.getSelectedItem().toString(),1));
-				frontpagePane.setText("");
-				backpagePane.setText("");
+				addCard(comboBoxKategorie);
 			}
+			
 		});
 		
 		//*********************Learn*************************************
@@ -340,13 +338,7 @@ public class VokabeltrainerGUI {
 		btn_exam_submit = new JButton("Abgaben");
 		btn_exam_submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!isChecked) {
-					checkifCorrectExam();
-				}else {
-					dataManager.changePhase(displayedCard,false);
-					displayNextCard();
-					btn_exam_Correkt.setEnabled(false);
-				}
+				submit_Input();
 			}
 		});
 		btn_exam_submit.setBounds(820, 405, 131, 31);
@@ -355,10 +347,10 @@ public class VokabeltrainerGUI {
 		btn_exam_Correkt = new JButton("Korrekt");
 		btn_exam_Correkt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dataManager.changePhase(displayedCard,true);
-				displayNextCard();
-				btn_exam_Correkt.setEnabled(false);
+				submittAsCorrectInput();
 			}
+
+			
 
 		});
 		btn_exam_Correkt.setBounds(672, 405, 131, 31);
@@ -368,7 +360,7 @@ public class VokabeltrainerGUI {
 		switchPanels(vocableEditorPanel);
 	}
 
-	private void fillKathegorieBoxes(Data.JsonDataManager jsonDataManager, JComboBox<String> comboBoxKategorieLearn) {
+	private void fillKathegorieBoxes(Application.JsonDataManager jsonDataManager, JComboBox<String> comboBoxKategorieLearn) {
 		KategoriesNames = jsonDataManager.getKategorie();
 		for(String kategorie : KategoriesNames)
 			comboBoxKategorieLearn.addItem(kategorie);
@@ -416,8 +408,6 @@ public class VokabeltrainerGUI {
 	}
 
 	private void startQueue() {
-		//for(CardData card : cardQueue)
-		//	System.out.println(card.getBackSide());
 		queueCounter = 0;
 		displayNextCard();
 		
@@ -450,5 +440,31 @@ public class VokabeltrainerGUI {
 		layeredPane.add(editorPanel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
+	}
+	
+	private void submit_Input() {
+		if(!isChecked) {
+			checkifCorrectExam();
+		}else {
+			submittAsCorrectInput();
+		}
+	}
+	
+	private void submittAsCorrectInput() {
+		dataManager.changePhase(displayedCard,true);
+		displayNextCard();
+		btn_exam_Correkt.setEnabled(false);
+	}
+	
+	private void addCard(JComboBox<String> comboBoxKategorie) {
+		dataManager.addCard(new CardData(frontpagePane.getText(), backpagePane.getText(), comboBoxKategorie.getSelectedItem().toString(),1));
+		frontpagePane.setText("");
+		backpagePane.setText("");
+	}
+	
+
+	private void addKategorie(JComboBox<String> comboBoxKategorie) {
+		dataManager.addKategorie(textAddKategorie.getText());
+		fillKathegorieBoxes(dataManager, comboBoxKategorie);
 	}
 }
