@@ -1,4 +1,4 @@
-package Main;
+package Adapters;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -36,7 +36,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLayeredPane;
 import java.awt.Color;
 
-public class Vokabeltrainer {
+public class VokabeltrainerGUI {
 	
 	//global and Menue
 	private JFrame frame;
@@ -64,27 +64,14 @@ public class Vokabeltrainer {
 	private List<String> KategoriesNames;
 	JsonDataManager dataManager;
 	private JTextField textAddKategorie;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Vokabeltrainer window = new Vokabeltrainer();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the application.
 	 */
-	public Vokabeltrainer() {
+	public VokabeltrainerGUI() {
 		initialize();
+		this.frame.setVisible(true);
 	}
 
 	/**

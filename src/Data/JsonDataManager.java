@@ -73,7 +73,6 @@ public class JsonDataManager {
 		}
 		return null;
 	}
-	
 	private int getIDCounter() {
 		File idCounterFile= getCounterTXT();
 		try {
@@ -86,7 +85,6 @@ public class JsonDataManager {
 			return 0;
 		}
 	}
-	
 	
 	public void changePhase(CardData displeayedCard, boolean increment){
 		File kategorieFile = this.getSpecificJSONFile(displeayedCard.getTopic());
@@ -113,7 +111,6 @@ public class JsonDataManager {
 		addJsonEntry(kategorieFile.getAbsolutePath(), currentContentOfNewFile);
 	}
 
-
 	/*
 	 * Combines the to Strings
 	 * params: 
@@ -129,7 +126,7 @@ public class JsonDataManager {
 		}
 		return (cobinedJSONString + existingFileContent.substring(positionWhereToAdd));
 	}
-
+	
 	private boolean isFirstCard(String JSONString) {
 		String firstChar = JSONString.substring(0, 1);
 		if(firstChar.equals("]"))
@@ -156,12 +153,6 @@ public class JsonDataManager {
 		}
 	}
 
-	/*
-	 * 
-	 * Params:
-	 * fileContent: Content of the JSON File
-	 */
-	
 
 	/*
 	 * Params:
