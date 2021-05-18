@@ -1,4 +1,4 @@
-package Data;
+package Application;
 //This class uses the Libary JSON.simple from https://code.google.com/archive/p/json-simple/downloads
 
 import java.io.BufferedWriter;
@@ -18,6 +18,8 @@ import java.util.*;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import Domain.CardData;
 
 public class JsonDataManager {
 	

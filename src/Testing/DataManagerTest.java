@@ -1,11 +1,14 @@
 package Testing;
 
 import static org.junit.jupiter.api.Assertions.*;
-import Data.*;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import Application.*;
+import Domain.CardData;
 
 import static org.mockito.Mockito.*;
 
