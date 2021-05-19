@@ -2,8 +2,6 @@ package Adapters;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JToolBar;
-import java.awt.BorderLayout;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
@@ -11,33 +9,21 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-import javax.swing.JSeparator;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import javax.swing.Box;
-import java.awt.Component;
 import javax.swing.border.TitledBorder;
 
 import Application.Gui_Controller;
-import Application.JsonDataManager;
-import Domain.CardData;
 
 import javax.swing.UIManager;
 import java.awt.Color;
-import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JEditorPane;
 import javax.swing.JComboBox;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLayeredPane;
-import java.awt.Color;
 
-public class VokabeltrainerGUI {
+public class VokabeltrainerGUI implements VocabelDisplayer {
 	
 	//global and Menue
 	private JFrame frame;
@@ -48,13 +34,12 @@ public class VokabeltrainerGUI {
 	private JPanel examPanel;
 	
 	//backFront-Panel
-	private JEditorPane frontpagePane;
-	private JEditorPane backpagePane;
+	protected JEditorPane frontpagePane;
+	protected JEditorPane backpagePane;
+	protected JButton btn_exam_Correkt;
+	protected JButton btn_exam_submit;
+	protected JTextField textAddKategorie;
 	private JPanel editorPanel;
-	
-	private JButton btn_exam_Correkt;
-	private JButton btn_exam_submit;
-	private JTextField textAddKategorie;
 	
 	
 	private Gui_Controller gui_controller;
@@ -225,7 +210,7 @@ public class VokabeltrainerGUI {
 		btnAddVoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				gui_controller.addCard(comboBoxKategorie);
+				gui_controller.addCard( frontpagePane.getText(), backpagePane.getText(), comboBoxKategorie.getSelectedItem().toString());
 			}
 			
 		});
@@ -354,7 +339,7 @@ public class VokabeltrainerGUI {
 
 	
 
-	//TODO: hier refactor in eigene Klasse oder dahin wo aufgerufen du HUND
+	//TODO: hier refactor in eigene Klasse oder dahin wo aufgerufen
 	public void checkifCorrectLearn() {
 		if(checkIfCorrect(backpagePane.getText(), gui_controller.getDisplayedCard().getBackSide())) {
 			backpagePane.setForeground(Color.green);
@@ -363,7 +348,7 @@ public class VokabeltrainerGUI {
 		}
 	}
 	
-	//TODO: hier refactor in eigene Klasse oder dahin wo aufgerufen du HUND
+	//TODO: hier refactor in eigene Klasse oder dahin wo aufgerufen
 	public void checkifCorrectExam() {
 		if(checkIfCorrect(backpagePane.getText(), gui_controller.getDisplayedCard().getBackSide())) {
 			
@@ -381,7 +366,6 @@ public class VokabeltrainerGUI {
 			return true;
 		return false;
 	}
-	
 	
 	
 	public void switchPanels(JPanel panel) {
@@ -406,34 +390,26 @@ public class VokabeltrainerGUI {
 		layeredPane.revalidate();
 	}
 	
-	public void setBackpaneColor(Color color){
+	public void setBackpaneColor(Color color) {
 		backpagePane.setForeground(color);
 	}
-	
-	public void setFrontpaneColor(Color color){
+
+	public void setFrontpaneColor(Color color) {
 		frontpagePane.setForeground(color);
 	}
 
-	public void setBackpane(String text){
+	public void setBackpane(String text) {
 		backpagePane.setText(text);
 	}
-	
-	public void setFrontpane(String text){
+
+	public void setFrontpane(String text) {
 		frontpagePane.setText(text);
 	}
-	
-	public String getFrontpane() {
-		return frontpagePane.getText();
-	}
-	
-	public String getBackpane() {
-		return backpagePane.getText();
-	}
-	
+
 	public String getAddKategorieText() {
 		return textAddKategorie.getText();
 	}
-	
+
 	public void setBtn_exam_Correkt(boolean enable) {
 		btn_exam_Correkt.setEnabled(enable);
 	}

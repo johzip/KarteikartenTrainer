@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import Adapters.VokabeltrainerGUI;
+import Adapters.VocabelDisplayer;
 import Domain.CardData;
 
 public class Gui_Controller {
@@ -17,19 +17,15 @@ public class Gui_Controller {
 	//Exam
 	
 	private Boolean isChecked = false;
-	
-
 	private List<CardData> cardQueue;
-	
 	private int queueCounter = 0;
 	private CardData displayedCard;
-	
 	private List<String> KategoriesNames;
 	private JsonDataManager dataManager;
-
-	private VokabeltrainerGUI gui;
 	
-	public Gui_Controller(VokabeltrainerGUI pGui){
+	private VocabelDisplayer gui;
+	
+	public Gui_Controller(VocabelDisplayer pGui){
 		gui = pGui;
 		dataManager = new JsonDataManager();
 	}
@@ -63,14 +59,14 @@ public class Gui_Controller {
 		gui.setBtn_exam_Correkt(false);
 	}
 	
-	public void addCard(JComboBox<String> comboBoxKategorie) {
-		dataManager.addCard(new CardData(gui.getFrontpane(), gui.getBackpane(), comboBoxKategorie.getSelectedItem().toString(),1));
+	public void addCard(String frontpane, String backpane, String selectedKategorie) {
+		dataManager.addCard(new CardData(frontpane, backpane, selectedKategorie ,1));
 		gui.setFrontpane("");
 		gui.setBackpane("");
 	}
 	
-
 	public void addKategorie(JComboBox<String> comboBoxKategorie) {
+		comboBoxKategorie.removeAllItems();
 		dataManager.addKategorie(gui.getAddKategorieText());
 		fillKathegorieBoxes(comboBoxKategorie);
 	}

@@ -7,7 +7,7 @@ public class VokabeltrainerMAIN {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VokabeltrainerGUI window = new VokabeltrainerGUI();
+					VocabelDisplayer window = new VokabeltrainerGUI();
 					
 				} catch (Exception e) {
 					e.printStackTrace();
