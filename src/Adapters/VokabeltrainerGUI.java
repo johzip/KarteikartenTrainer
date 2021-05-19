@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
 
 import Application.Gui_Controller;
+import Application.VocabelDisplayer;
 
 import javax.swing.UIManager;
 import java.awt.Color;

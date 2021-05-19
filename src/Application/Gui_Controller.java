@@ -8,7 +8,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import Adapters.VocabelDisplayer;
 import Domain.CardData;
 
 public class Gui_Controller {
