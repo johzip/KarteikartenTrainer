@@ -3,10 +3,7 @@ package Application;
 import java.awt.Color;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import Domain.CardData;
 
@@ -53,20 +50,20 @@ public class Gui_Controller {
 	}
 	
 	public void submittInputAs(Boolean isCorrect) {
-		dataManager.changePhase(displayedCard,isCorrect);
+		dataManager.changePhaseOfCardDependingIf(displayedCard,isCorrect);
 		displayNextCard();
 		gui.setBtn_exam_Correkt(false);
 	}
 	
 	public void addCard(String frontpane, String backpane, String selectedKategorie) {
-		dataManager.addCard(new CardData(frontpane, backpane, selectedKategorie ,1));
+		dataManager.addCardWith(new CardData(frontpane, backpane, selectedKategorie ,1));
 		gui.setFrontpane("");
 		gui.setBackpane("");
 	}
 	
 	public void addKategorie(JComboBox<String> comboBoxKategorie) {
 		comboBoxKategorie.removeAllItems();
-		dataManager.addKategorie(gui.getAddKategorieText());
+		dataManager.addKategorieNamed(gui.getAddKategorieText());
 		fillKathegorieBoxes(comboBoxKategorie);
 	}
 		
@@ -80,12 +77,12 @@ public class Gui_Controller {
 	public void updateCardView(JComboBox<String> comboBoxKategorieExam, JComboBox<String> comboBoxPhaseExam) {
 		int phase = Integer.parseInt(comboBoxPhaseExam.getSelectedItem().toString());
 		String kategorie =comboBoxKategorieExam.getSelectedItem().toString();
-		cardQueue = dataManager.loadCards( phase, kategorie);
+		cardQueue = dataManager.loadAllCardsOf( phase, kategorie);
 		startQueue();
 	}
 	
 	public void fillKathegorieBoxes( JComboBox<String> comboBoxKategorieLearn) {
-		KategoriesNames = dataManager.getKategorie();
+		KategoriesNames = dataManager.getNamesOfAllKategories();
 		for(String kategorie : KategoriesNames)
 			comboBoxKategorieLearn.addItem(kategorie);
 	}

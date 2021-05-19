@@ -280,7 +280,7 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 		examPanel = new JPanel();
 		
 		
-		layeredPane.setLayer(examPanel, 3);
+		layeredPane.setLayer(examPanel, 1);
 		examPanel.setLayout(null);
 		examPanel.setBounds(0, 55, 975, 445);
 		layeredPane.add(examPanel);
@@ -354,7 +354,7 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 		if(checkIfCorrect(backpagePane.getText(), gui_controller.getDisplayedCard().getBackSide())) {
 			
 			backpagePane.setForeground(Color.green);
-			gui_controller.getDataManager().changePhase(gui_controller.getDisplayedCard(),true);
+			gui_controller.getDataManager().changePhaseOfCardDependingIf(gui_controller.getDisplayedCard(),true);
 		}else {
 			backpagePane.setForeground(Color.red);
 			btn_exam_Correkt.setEnabled(true);
