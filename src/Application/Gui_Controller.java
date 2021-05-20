@@ -55,7 +55,7 @@ public class Gui_Controller {
 		gui.setBtn_exam_Correkt(false);
 	}
 	
-	public void addCard(String frontpane, String backpane, String selectedKategorie) {
+	public void addCardWith(String frontpane, String backpane, String selectedKategorie) {
 		dataManager.addCardWith(new CardData(frontpane, backpane, selectedKategorie ,1));
 		gui.setFrontpane("");
 		gui.setBackpane("");

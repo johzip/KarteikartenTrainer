@@ -211,7 +211,7 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 		btnAddVoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				gui_controller.addCard( frontpagePane.getText(), backpagePane.getText(), comboBoxKategorie.getSelectedItem().toString());
+				gui_controller.addCardWith( frontpagePane.getText(), backpagePane.getText(), comboBoxKategorie.getSelectedItem().toString());
 			}
 			
 		});

@@ -37,7 +37,7 @@ public class JsonDataManager {
 		    obj.put("Frontside", cardData.getFrontSide());
 		    obj.put("Backside", cardData.getBackSide());
 		    obj.put("Learningphase", new Integer(1));
-		    obj.put("Id", idCounter+1);
+		    obj.put("Id", idCounter + 1);
 		    jsonText = obj.toString();
 			String newFileConent = addContentToFilesContent(getFileContentOf(kategorieFile), jsonText);
 		    replaceJSONFileContentWith(kategorieFile.getAbsolutePath(), newFileConent);
