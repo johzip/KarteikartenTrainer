@@ -197,7 +197,7 @@ public class JsonDataManager {
 				String frontSideInput = obj.get("Frontside").toString();
 				String backSideInput = obj.get("Backside").toString();
 				int id = Integer.parseInt(obj.get("Id").toString());
-				String topic = cardsDataFile.getName().split(".")[0];
+				String topic = getKategoriNameFrom(cardsDataFile);
 				int learningphase = Integer.parseInt(obj.get("Learningphase").toString());
 				CardData card =new CardData(frontSideInput, backSideInput, topic, learningphase, id);
 				cards.add(card);
@@ -208,6 +208,15 @@ public class JsonDataManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private String getKategoriNameFrom(File cardsDataFile) {
+		String fullName = cardsDataFile.getName();
+		System.out.println(fullName);
+		int pos = fullName.lastIndexOf(".");
+        String KategoriName = fullName.substring(0, pos);
+		System.out.println(KategoriName);
+		return KategoriName;
 	}
 	
 	
