@@ -13,6 +13,7 @@ import javax.swing.border.TitledBorder;
 
 import Application.Gui_Controller;
 import Application.VocabelDisplayer;
+import Application.InputCorrectnessChecker;
 
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -44,12 +45,15 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 	
 	
 	private Gui_Controller gui_controller;
+	private InputCorrectnessChecker correctnessChecker;
 
 	/**
 	 * Create the application.
 	 */
 	public VokabeltrainerGUI() {
 		gui_controller = new Gui_Controller(this);
+		correctnessChecker = new InputCorrectnessChecker(this, gui_controller);
+		gui_controller.setCorrectnessChecker(correctnessChecker);
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -268,7 +272,7 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 		JButton btn_learn_Check = new JButton("\u00DCberpr\u00FCfen");
 		btn_learn_Check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				checkifCorrectLearn();
+				correctnessChecker.checkifCorrectLearn(backpagePane.getText());
 			}
 
 		});
@@ -318,7 +322,7 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 		btn_exam_submit = new JButton("Abgaben");
 		btn_exam_submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				gui_controller.submit_Input();
+				gui_controller.submit_Input(backpagePane.getText());
 			}
 		});
 		btn_exam_submit.setBounds(820, 405, 131, 31);
@@ -338,36 +342,6 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 		switchPanels(vocableEditorPanel);
 	}
 
-	
-
-	//TODO: hier refactor in eigene Klasse oder dahin wo aufgerufen
-	public void checkifCorrectLearn() {
-		if(checkIfCorrect(backpagePane.getText(), gui_controller.getDisplayedCard().getBackSide())) {
-			backpagePane.setForeground(Color.green);
-		}else {
-			backpagePane.setForeground(Color.red);
-		}
-	}
-	
-	//TODO: hier refactor in eigene Klasse oder dahin wo aufgerufen
-	public void checkifCorrectExam() {
-		if(checkIfCorrect(backpagePane.getText(), gui_controller.getDisplayedCard().getBackSide())) {
-			
-			backpagePane.setForeground(Color.green);
-			gui_controller.getDataManager().changePhaseOfCardDependingIf(gui_controller.getDisplayedCard(),true);
-		}else {
-			backpagePane.setForeground(Color.red);
-			btn_exam_Correkt.setEnabled(true);
-		}
-		btn_exam_submit.setText("Nächstes");
-	}
-	
-	public boolean checkIfCorrect(String input, String correctAnswer) {
-		if(input.equals(correctAnswer))
-			return true;
-		return false;
-	}
-	
 	
 	public void switchPanels(JPanel panel) {
 		setBackpane("");
@@ -413,6 +387,11 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 
 	public void setBtn_exam_Correkt(boolean enable) {
 		btn_exam_Correkt.setEnabled(enable);
+	}
+
+	@Override
+	public void setBtn_exam_submitText(String text) {
+		btn_exam_submit.setText(text);
 	}
 	
 }

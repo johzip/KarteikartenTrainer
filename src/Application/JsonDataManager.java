@@ -212,11 +212,9 @@ public class JsonDataManager {
 
 	private String getKategoriNameFrom(File cardsDataFile) {
 		String fullName = cardsDataFile.getName();
-		System.out.println(fullName);
 		int pos = fullName.lastIndexOf(".");
-        String KategoriName = fullName.substring(0, pos);
-		System.out.println(KategoriName);
-		return KategoriName;
+        String KategoriNameWithoutExtesion = fullName.substring(0, pos);
+		return KategoriNameWithoutExtesion;
 	}
 	
 	

@@ -20,6 +20,7 @@ public class Gui_Controller {
 	private JsonDataManager dataManager;
 	
 	private VocabelDisplayer gui;
+	private InputCorrectnessChecker correctnessChecker;
 	
 	public Gui_Controller(VocabelDisplayer pGui){
 		gui = pGui;
@@ -40,9 +41,9 @@ public class Gui_Controller {
 	//------------------------------------------------------
 	
 	
-	public void submit_Input() {
+	public void submit_Input(String backpageText) {
 		if(!isChecked) {
-			gui.checkifCorrectExam();
+			correctnessChecker.checkifCorrectExam(backpageText);
 			isChecked = true;
 		}else {
 			submittInputAs(false);
@@ -91,6 +92,7 @@ public class Gui_Controller {
 		isChecked = false;
 		gui.setBackpane("");
 		gui.setBackpaneColor(Color.BLACK);
+		gui.setBtn_exam_submitText("Überprüfen");
 		try {
 			displayedCard = this.cardQueue.get(queueCounter);
 			gui.setFrontpane(displayedCard.getFrontSide());
@@ -98,5 +100,9 @@ public class Gui_Controller {
 		}catch(IndexOutOfBoundsException ex) {
 			gui.setFrontpane("Es giebt keine Karten mehr in der ausgewählten Phase, von dieser Kategorie");
 		}
+	}
+
+	public void setCorrectnessChecker(InputCorrectnessChecker checker) {
+		correctnessChecker=checker;
 	}
 }

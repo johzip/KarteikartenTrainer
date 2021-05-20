@@ -17,7 +17,5 @@ public interface VocabelDisplayer {
 
 	public void setBtn_exam_Correkt(boolean enable);
 	
-	//temporary
-	public void checkifCorrectExam();
-
+	public void setBtn_exam_submitText(String text);
 }
