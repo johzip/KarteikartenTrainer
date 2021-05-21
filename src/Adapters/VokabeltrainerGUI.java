@@ -50,8 +50,8 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 	/**
 	 * Create the application.
 	 */
-	public VokabeltrainerGUI() {
-		gui_controller = new Gui_Controller(this);
+	public VokabeltrainerGUI(String dataFilepath) {
+		gui_controller = new Gui_Controller(this, dataFilepath);
 		correctnessChecker = new InputCorrectnessChecker(this, gui_controller);
 		gui_controller.setCorrectnessChecker(correctnessChecker);
 		initialize();

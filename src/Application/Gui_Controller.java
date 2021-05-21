@@ -9,9 +9,6 @@ import Domain.CardData;
 
 public class Gui_Controller {
 	
-	
-	//Exam
-	
 	private Boolean isChecked = false;
 	private List<CardData> cardQueue;
 	private int queueCounter = 0;
@@ -22,9 +19,9 @@ public class Gui_Controller {
 	private VocabelDisplayer gui;
 	private InputCorrectnessChecker correctnessChecker;
 	
-	public Gui_Controller(VocabelDisplayer pGui){
+	public Gui_Controller(VocabelDisplayer pGui, String dataFilepath){
 		gui = pGui;
-		dataManager = new Card_Data_Manager();
+		dataManager = new Card_Data_Manager(dataFilepath);
 	}
 	
 	//---------------------Temporary------------------------

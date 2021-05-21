@@ -17,11 +17,12 @@ import Domain.CardData;
 public class Card_Data_Manager {
 	
 	private JsonDataManager jsonManager;
-	private String storageURL = System.getProperty("user.dir") + "\\JSON_Data";
+	private String storageURL;
 	private IDCounter_Manager idCounterManager;
 
 	
-	public Card_Data_Manager(){
+	public Card_Data_Manager(String dataFilepath){
+		storageURL = dataFilepath;
 		jsonManager = new JsonDataManager();
 		idCounterManager = new IDCounter_Manager(jsonManager, jsonManager.getAllKategorieDataFiles(storageURL));
 	}
@@ -67,7 +68,7 @@ public class Card_Data_Manager {
 		    jsonText = obj.toString();
 		    currentContentOfNewFile = jsonManager.addContentToFilesContent(currentContentOfNewFile, jsonText);
 		}
-		jsonManager.replaceJSONFileContentWith(kategorieFile.getAbsolutePath(), currentContentOfNewFile);
+		jsonManager.replaceFileContentWith(kategorieFile.getAbsolutePath(), currentContentOfNewFile);
 	}
 	
 	public List<String> getNamesOfAllKategories() {

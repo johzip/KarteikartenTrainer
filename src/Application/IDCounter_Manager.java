@@ -16,7 +16,7 @@ public class IDCounter_Manager {
 	
 	public void incrementIDCounter() {
 		idCounter++;
-		jsonManager.replaceJSONFileContentWith(counterFile.getAbsolutePath(),""+idCounter);
+		jsonManager.replaceFileContentWith(counterFile.getAbsolutePath(),""+idCounter);
 	}
 	
 	public File getFileOfCounter(File[] dataFiles) {

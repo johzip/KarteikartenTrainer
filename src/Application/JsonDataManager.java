@@ -1,17 +1,12 @@
 package Application;
 
 import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 import org.json.simple.*;
@@ -49,7 +44,7 @@ public class JsonDataManager {
 		    obj.put("Id",  + 1);
 		    jsonText = obj.toString();
 			String newFileConent = addContentToFilesContent(getFileContentOf(kategorieFile), jsonText);
-			replaceJSONFileContentWith(kategorieFile.getAbsolutePath(), newFileConent);
+			replaceFileContentWith(kategorieFile.getAbsolutePath(), newFileConent);
 		}
 		catch(NullPointerException e2) {
 			System.out.println("addCard has Error");
@@ -78,8 +73,7 @@ public class JsonDataManager {
 		return false;
 	}
 
-
-	public void replaceJSONFileContentWith(String absolutePath, String jsonText){
+	public void replaceFileContentWith(String absolutePath, String jsonText){
 		try (FileWriter fw = new FileWriter(absolutePath, false);
 	       BufferedWriter bw = new BufferedWriter(fw)) {
 			bw.write(jsonText);
@@ -91,12 +85,10 @@ public class JsonDataManager {
 		}
 	}
 
-
 	public String getFileContentOf(File kategorieFile) throws IOException {
 		Path path = Paths.get(kategorieFile.getAbsolutePath());
 		return String.join("\n", Files.readAllLines(path));
 	}
-
 
 	public List<CardData> extractCardDataObjectsFrom(File cardsDataFile) {
 		try {
@@ -127,7 +119,6 @@ public class JsonDataManager {
         String KategoriNameWithoutExtesion = fullName.substring(0, pos);
 		return KategoriNameWithoutExtesion;
 	}
-	
 	
 	public JSONObject parseIntoJSONObject(String fileContent) {
 		try {
