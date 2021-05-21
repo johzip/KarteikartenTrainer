@@ -17,14 +17,14 @@ public class Gui_Controller {
 	private int queueCounter = 0;
 	private CardData displayedCard;
 	private List<String> KategoriesNames;
-	private JsonDataManager dataManager;
+	private Card_Data_Manager dataManager;
 	
 	private VocabelDisplayer gui;
 	private InputCorrectnessChecker correctnessChecker;
 	
 	public Gui_Controller(VocabelDisplayer pGui){
 		gui = pGui;
-		dataManager = new JsonDataManager();
+		dataManager = new Card_Data_Manager();
 	}
 	
 	//---------------------Temporary------------------------
@@ -34,7 +34,7 @@ public class Gui_Controller {
 		return displayedCard;
 	}
 
-	public JsonDataManager getDataManager() {
+	public Card_Data_Manager getDataManager() {
 		return dataManager;
 	}
 	

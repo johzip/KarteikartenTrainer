@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="lib" path="C:/Users/JohannesZ/eclipse-workspace/Vokabeltrainer/externalLibarys/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/JohannesZ/eclipse-workspace/Vokabeltrainer/externalLibarys/mockito-core-3.4.4.jar"/>
+	<classpathentry kind="lib" path="externalLibarys/mockito-core-3.4.4.jar"/>
+	<classpathentry kind="lib" path="externalLibarys/assertj-core-3.16.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

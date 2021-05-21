@@ -249,16 +249,7 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 		lblPhaseLearn.setBounds(385, 19, 82, 23);
 		learnPanel.add(lblPhaseLearn);
 		
-		comboBoxPhaseLearn.setBounds(487, 16, 56, 29);
-		comboBoxPhaseLearn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				gui_controller.updateCardView(comboBoxKategorieLearn, comboBoxPhaseLearn);
-			}
-		});
-		learnPanel.add(comboBoxPhaseLearn);
-		for(int phaseNr =1; phaseNr <=6 ; phaseNr++)
-			comboBoxPhaseLearn.addItem(""+phaseNr);
+		
 		
 		JButton btn_learn_next = new JButton("n\u00E4chstes");
 		btn_learn_next.addActionListener(new ActionListener() {
@@ -338,6 +329,17 @@ public class VokabeltrainerGUI implements VocabelDisplayer {
 		btn_exam_Correkt.setBounds(672, 405, 131, 31);
 		examPanel.add(btn_exam_Correkt);
 		btn_exam_Correkt.setEnabled(false);
+		
+		comboBoxPhaseLearn.setBounds(487, 16, 56, 29);
+		comboBoxPhaseLearn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				gui_controller.updateCardView(comboBoxKategorieLearn, comboBoxPhaseLearn);
+			}
+		});
+		learnPanel.add(comboBoxPhaseLearn);
+		for(int phaseNr =1; phaseNr <=6 ; phaseNr++)
+			comboBoxPhaseLearn.addItem(""+phaseNr);
 		
 		switchPanels(vocableEditorPanel);
 	}

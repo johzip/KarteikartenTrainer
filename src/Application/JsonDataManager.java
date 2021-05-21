@@ -22,26 +22,34 @@ import Domain.CardData;
 
 public class JsonDataManager {
 	
-	private String storageURL = System.getProperty("user.dir") + "\\JSON_Data" ;
-	private static int idCounter;
-	
-	public JsonDataManager(){
-		idCounter=getIDCounterValue();
+	public File[] getAllKategorieDataFiles(String storageURL) {
+		File JsonDataDirectory = new File(storageURL);
+		File[] JsonDatafiles = JsonDataDirectory.listFiles();
+		return JsonDatafiles;
 	}
 	
-	public void addCardWith(CardData cardData){
+	public File getSpecificKategorieFile(String cardKategorie,String storageURL) {
+		File[] datafiles = getAllKategorieDataFiles(storageURL);
+		File kategorieFile = null;
+		for(File datafile : datafiles) {
+			if(datafile.getName().equals(cardKategorie+".json")) {
+				kategorieFile = datafile;
+			}
+		}
+		return kategorieFile;
+	}
+	
+	public void addCardWith(CardData cardData, File kategorieFile, int idCounter){
 		try {
-			File kategorieFile = getSpecificKategorieFile(cardData.getTopic());
 			JSONObject obj = new JSONObject();
 		    String jsonText;
 		    obj.put("Frontside", cardData.getFrontSide());
 		    obj.put("Backside", cardData.getBackSide());
 		    obj.put("Learningphase", new Integer(1));
-		    obj.put("Id", idCounter + 1);
+		    obj.put("Id",  + 1);
 		    jsonText = obj.toString();
 			String newFileConent = addContentToFilesContent(getFileContentOf(kategorieFile), jsonText);
-		    replaceJSONFileContentWith(kategorieFile.getAbsolutePath(), newFileConent);
-		    incrementIDCounter();
+			replaceJSONFileContentWith(kategorieFile.getAbsolutePath(), newFileConent);
 		}
 		catch(NullPointerException e2) {
 			System.out.println("addCard has Error");
@@ -53,59 +61,7 @@ public class JsonDataManager {
 		}
 	}
 	
-	private void incrementIDCounter() {
-		idCounter++;
-		File idCounterFile = getFileOfCounter();
-		replaceJSONFileContentWith(idCounterFile.getAbsolutePath(),""+idCounter);
-	}
-	private File getFileOfCounter() {
-		File[] dataFiles = getAllKategorieDataFiles();
-		for(File datafile : dataFiles) {
-			if(datafile.getName().equals("counter.txt")) {
-				return datafile;
-			}
-		}
-		return null;
-	}
-	private int getIDCounterValue() {
-		File idCounterFile= getFileOfCounter();
-		try {
-			String contentCounterFile = getFileContentOf(idCounterFile);
-			return Integer.parseInt(contentCounterFile);
-			
-		} catch (IOException e) {
-			System.out.println("getIDCounter has Error");
-			e.printStackTrace();
-			return 0;
-		}
-	}
-	
-	public void changePhaseOfCardDependingIf(CardData displeayedCard, boolean isCorrect){
-		File kategorieFile = this.getSpecificKategorieFile(displeayedCard.getTopic());
-		List<CardData> allCards = extractCardDataObjectsFrom(kategorieFile);
-		String currentContentOfNewFile = "{\"Cards\":[]}";
-		
-		for(CardData card : allCards) {
-			if(card.getID() == displeayedCard.getID()) {
-				if(isCorrect) {
-					card.incrementPhase();
-				}else {
-					card.resetPhase();
-				}
-			}
-			JSONObject obj = new JSONObject();
-		    String jsonText;
-		    obj.put("Frontside", card.getFrontSide());
-		    obj.put("Backside", card.getBackSide());
-		    obj.put("Learningphase", card.getPhase());
-		    obj.put("Id", card.getID());
-		    jsonText = obj.toString();
-		    currentContentOfNewFile = addContentToFilesContent(currentContentOfNewFile, jsonText);
-		}
-		replaceJSONFileContentWith(kategorieFile.getAbsolutePath(), currentContentOfNewFile);
-	}
-	
-	private String addContentToFilesContent(String existingFileContent, String jsonTextToAdd) {
+	public String addContentToFilesContent(String existingFileContent, String jsonTextToAdd) {
 		existingFileContent = existingFileContent.trim();
 		int positionWhereToAdd = existingFileContent.indexOf("[") + 1;
 		String cobinedJSONString = existingFileContent.substring(0, positionWhereToAdd) + jsonTextToAdd;
@@ -115,7 +71,7 @@ public class JsonDataManager {
 		return (cobinedJSONString + existingFileContent.substring(positionWhereToAdd));
 	}
 	
-	private boolean isFirstCard(String JSONString) {
+	public boolean isFirstCard(String JSONString) {
 		String firstChar = JSONString.substring(0, 1);
 		if(firstChar.equals("]"))
 			return true;
@@ -123,7 +79,7 @@ public class JsonDataManager {
 	}
 
 
-	private void replaceJSONFileContentWith(String absolutePath, String jsonText){
+	public void replaceJSONFileContentWith(String absolutePath, String jsonText){
 		try (FileWriter fw = new FileWriter(absolutePath, false);
 	       BufferedWriter bw = new BufferedWriter(fw)) {
 			bw.write(jsonText);
@@ -136,58 +92,13 @@ public class JsonDataManager {
 	}
 
 
-	private String getFileContentOf(File kategorieFile) throws IOException {
+	public String getFileContentOf(File kategorieFile) throws IOException {
 		Path path = Paths.get(kategorieFile.getAbsolutePath());
 		return String.join("\n", Files.readAllLines(path));
 	}
 
-	
-	private File getSpecificKategorieFile(String cardKategorie) {
-		File[] datafiles = getAllKategorieDataFiles();
-		File kategorieFile = null;
-		for(File datafile : datafiles) {
-			if(datafile.getName().equals(cardKategorie+".json")) {
-				kategorieFile = datafile;
-			}
-		}
-		return kategorieFile;
-	}
-	
-	
-	public List<String> getNamesOfAllKategories() {
-		File[] JsonDatafiles = getAllKategorieDataFiles();
-		List<String> DataFilesNames = new ArrayList<String>();
-		for(File file : JsonDatafiles) {
-			String[] filename= file.getName().split("\\.");
-			if(filename[1].equals("json")) {
-				String filenameWithoutDataType = filename[0];
-				DataFilesNames.add(filenameWithoutDataType);
-			}
-		}
-		return DataFilesNames;
-	}
 
-	
-	private File[] getAllKategorieDataFiles() {
-		File JsonDataDirectory = new File(storageURL);
-		File[] JsonDatafiles = JsonDataDirectory.listFiles();
-		return JsonDatafiles;
-	}
-
-	
-	public List<CardData> loadAllCardsOf(int phase, String kategorie) {
-		File cardsDataFile = getSpecificKategorieFile(kategorie);
-		List<CardData> allCards = extractCardDataObjectsFrom(cardsDataFile);
-		List<CardData> phaseCards = new ArrayList<CardData>();
-		for(CardData card:allCards) {
-			if(card.getPhase()==phase)
-				phaseCards.add(card);
-		}
-		return phaseCards;
-	}
-
-
-	private List<CardData> extractCardDataObjectsFrom(File cardsDataFile) {
+	public List<CardData> extractCardDataObjectsFrom(File cardsDataFile) {
 		try {
 			JSONObject dataObject = parseIntoJSONObject(getFileContentOf(cardsDataFile));
 			JSONArray JasonCards = (JSONArray) dataObject.get("Cards");
@@ -210,7 +121,7 @@ public class JsonDataManager {
 		return null;
 	}
 
-	private String getKategoriNameFrom(File cardsDataFile) {
+	public String getKategoriNameFrom(File cardsDataFile) {
 		String fullName = cardsDataFile.getName();
 		int pos = fullName.lastIndexOf(".");
         String KategoriNameWithoutExtesion = fullName.substring(0, pos);
@@ -218,7 +129,7 @@ public class JsonDataManager {
 	}
 	
 	
-	private JSONObject parseIntoJSONObject(String fileContent) {
+	public JSONObject parseIntoJSONObject(String fileContent) {
 		try {
 			JSONParser parser = new JSONParser();
 			Object kategorieObject =  parser.parse(fileContent);
@@ -230,24 +141,4 @@ public class JsonDataManager {
 			return null;
 		}
 	}
-
-
-	public void addKategorieNamed(String name) {
-		File newJSONfile = new File (storageURL, (""+name+".json"));
-		try(FileOutputStream fStream = new FileOutputStream(newJSONfile);
-			    DataOutputStream data0 = new DataOutputStream(fStream)) {
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try (FileWriter fw = new FileWriter(newJSONfile);
-			       BufferedWriter bw = new BufferedWriter(fw)){
-			bw.write("{\"Cards\":[]}");
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 }

@@ -31,8 +31,6 @@ public class InputCorrectnessChecker {
 	}
 	
 	public boolean checkIfCorrect(String input, String correctAnswer) {
-		if(input.equals(correctAnswer))
-			return true;
-		return false;
+		return input.equals(correctAnswer);
 	}
 }
