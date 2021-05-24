@@ -12,10 +12,12 @@ public class InputCorrectnessChecker {
 	}
 
 	public void checkifCorrectLearn(String backpage) {
-		if(checkIfCorrect(backpage, gui_controller.getDisplayedCard().getBackSide())) {
+		String correctBacksideOfShownCard = gui_controller.getDisplayedCard().getBackSide();
+		if(checkIfCorrect(backpage, correctBacksideOfShownCard)) {
 			gui.setBackpaneColor(Color.green);
 		}else {
 			gui.setBackpaneColor(Color.red);
+			gui.setBackpane(correctBacksideOfShownCard);
 		}
 	}
 	

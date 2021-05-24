@@ -9,9 +9,12 @@ public class VokabeltrainerMAIN {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					if(args.length > 0)
+					if(args.length > 0) {
 						new VokabeltrainerGUI(args[0]);
-					new VokabeltrainerGUI(System.getProperty("user.dir") + "\\JSON_Data");
+					}
+					else {
+						new VokabeltrainerGUI(System.getProperty("user.dir") + "\\JSON_Data");
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
