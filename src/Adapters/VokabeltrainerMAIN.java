@@ -2,7 +2,7 @@ package Adapters;
 
 import java.awt.EventQueue;
 
-import Application.VocabelDisplayer;
+import Application.GuiGetterSetter;
 
 public class VokabeltrainerMAIN {
 	public static void main(String[] args) {

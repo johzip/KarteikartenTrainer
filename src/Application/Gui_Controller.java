@@ -16,10 +16,10 @@ public class Gui_Controller {
 	private List<String> KategoriesNames;
 	private Card_Data_Manager dataManager;
 	
-	private VocabelDisplayer gui;
+	private GuiGetterSetter gui;
 	private InputCorrectnessChecker correctnessChecker;
 	
-	public Gui_Controller(VocabelDisplayer pGui, String dataFilepath){
+	public Gui_Controller(GuiGetterSetter pGui, String dataFilepath){
 		gui = pGui;
 		dataManager = new Card_Data_Manager(dataFilepath);
 	}

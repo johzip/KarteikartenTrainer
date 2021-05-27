@@ -3,10 +3,10 @@ package Application;
 import java.awt.Color;
 
 public class InputCorrectnessChecker {
-	private VocabelDisplayer gui;
+	private GuiGetterSetter gui;
 	private Gui_Controller gui_controller;
 	
-	public InputCorrectnessChecker(VocabelDisplayer vokabeltrainerGUI, Gui_Controller controller) {
+	public InputCorrectnessChecker(GuiGetterSetter vokabeltrainerGUI, Gui_Controller controller) {
 		gui=vokabeltrainerGUI;
 		gui_controller = controller;
 	}

@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
 
 import Application.Gui_Controller;
-import Application.VocabelDisplayer;
+import Application.GuiGetterSetter;
 import Application.InputCorrectnessChecker;
 
 import javax.swing.UIManager;
@@ -25,7 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLayeredPane;
 
-public class VokabeltrainerGUI implements VocabelDisplayer {
+public class VokabeltrainerGUI implements GuiGetterSetter {
 	
 	//global and Menue
 	private JFrame frame;

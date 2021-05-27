@@ -2,7 +2,7 @@ package Application;
 
 import java.awt.Color;
 
-public interface VocabelDisplayer {
+public interface GuiGetterSetter {
 	
 
 	public void setBackpaneColor(Color color);
