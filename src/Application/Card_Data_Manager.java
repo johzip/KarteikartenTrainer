@@ -16,7 +16,7 @@ import Domain.CardData;
 
 public class Card_Data_Manager {
 	
-	private JsonDataProcessor jsonManager;
+	private CardDataProcessor jsonManager;
 	private String storageURL;
 	private IDCounter_Manager idCounterManager;
 

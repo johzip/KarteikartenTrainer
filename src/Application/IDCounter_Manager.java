@@ -5,10 +5,10 @@ import java.io.IOException;
 
 public class IDCounter_Manager {
 	private static int idCounter;
-	private JsonDataManager jsonManager;
+	private CardDataProcessor jsonManager;
 	File counterFile;
 	
-	public IDCounter_Manager(JsonDataManager pJSONManager, File[] pDataFiles){
+	public IDCounter_Manager(CardDataProcessor pJSONManager, File[] pDataFiles){
 		counterFile = getFileOfCounter(pDataFiles);
 		jsonManager = pJSONManager;
 		idCounter=getIDCounterValueFromDataFile();
