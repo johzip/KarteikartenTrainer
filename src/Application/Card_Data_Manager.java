@@ -16,14 +16,14 @@ import Domain.CardData;
 
 public class Card_Data_Manager {
 	
-	private JsonDataManager jsonManager;
+	private JsonDataProcessor jsonManager;
 	private String storageURL;
 	private IDCounter_Manager idCounterManager;
 
 	
 	public Card_Data_Manager(String dataFilepath){
 		storageURL = dataFilepath;
-		jsonManager = new JsonDataManager();
+		jsonManager = new JsonDataProcessor();
 		idCounterManager = new IDCounter_Manager(jsonManager, jsonManager.getAllKategorieDataFiles(storageURL));
 	}
 	

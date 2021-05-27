@@ -15,14 +15,14 @@ import org.json.simple.parser.ParseException;
 
 import Domain.CardData;
 
-public class JsonDataManager {
-	
+public class JsonDataProcessor implements CardDataProcessor {
+	@Override
 	public File[] getAllKategorieDataFiles(String storageURL) {
 		File JsonDataDirectory = new File(storageURL);
 		File[] JsonDatafiles = JsonDataDirectory.listFiles();
 		return JsonDatafiles;
 	}
-	
+	@Override
 	public File getSpecificKategorieFile(String cardKategorie,String storageURL) {
 		File[] datafiles = getAllKategorieDataFiles(storageURL);
 		File kategorieFile = null;
@@ -33,7 +33,7 @@ public class JsonDataManager {
 		}
 		return kategorieFile;
 	}
-	
+	@Override
 	public void addCardWith(CardData cardData, File kategorieFile, int idCounter){
 		try {
 			JSONObject obj = new JSONObject();
@@ -55,7 +55,7 @@ public class JsonDataManager {
 			System.out.println(e3); 
 		}
 	}
-	
+	@Override
 	public String addContentToFilesContent(String existingFileContent, String jsonTextToAdd) {
 		existingFileContent = existingFileContent.trim();
 		int positionWhereToAdd = existingFileContent.indexOf("[") + 1;
@@ -65,14 +65,14 @@ public class JsonDataManager {
 		}
 		return (cobinedJSONString + existingFileContent.substring(positionWhereToAdd));
 	}
-	
+	@Override
 	public boolean isFirstCard(String JSONString) {
 		String firstChar = JSONString.substring(0, 1);
 		if(firstChar.equals("]"))
 			return true;
 		return false;
 	}
-
+	@Override
 	public void replaceFileContentWith(String absolutePath, String jsonText){
 		try (FileWriter fw = new FileWriter(absolutePath, false);
 	       BufferedWriter bw = new BufferedWriter(fw)) {
@@ -84,12 +84,12 @@ public class JsonDataManager {
 			e1.printStackTrace();
 		}
 	}
-
+	@Override
 	public String getFileContentOf(File kategorieFile) throws IOException {
 		Path path = Paths.get(kategorieFile.getAbsolutePath());
 		return String.join("\n", Files.readAllLines(path));
 	}
-
+	@Override
 	public List<CardData> extractCardDataObjectsFrom(File cardsDataFile) {
 		try {
 			JSONObject dataObject = parseIntoJSONObject(getFileContentOf(cardsDataFile));
@@ -112,7 +112,7 @@ public class JsonDataManager {
 		}
 		return null;
 	}
-
+	@Override
 	public String getKategoriNameFrom(File cardsDataFile) {
 		String fullName = cardsDataFile.getName();
 		int pos = fullName.lastIndexOf(".");
